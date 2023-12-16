@@ -35,11 +35,10 @@ stores = {
 }
 
 # ローカルサーバー(http://127.0.0.1:8000)にリクエストが来た時の処理    ※ターミナルにて『uvicorn main:app --reload』実行でローカルサーバー開く
-@app.get("/")                    # 『/』というURLにGetリクエスト来たら、
-async def Hello():               # 『async def』で非同期処理,  『def』なら同期処理    
-    return {"stores":"World!"}
+#@app.get("/")                    # 『/』というURLにGetリクエスト来たら、
+#async def Hello():               # 『async def』で非同期処理,  『def』なら同期処理    
+#    return {"stores":"World!"}
 
-# 12/14宿題対応
 @app.get("/store")
 async def get_stores():
     return {"stores": stores}
