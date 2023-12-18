@@ -1,7 +1,8 @@
-# FastAPI読み込み
-from fastapi import FastAPI
-# FastAPIが提供するCORS処理ミドルウェア(通信時に使うセキュリティ関連ライブラリ)
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI  # FastAPI読み込み
+from fastapi.middleware.cors import CORSMiddleware  # FastAPIが提供するCORS処理ミドルウェア(通信時に使うセキュリティ関連ライブラリ)
+from fastapi.responses import StreamingResponse
+from PIL import Image
+from io import BytesIO
 
 # FastAPIインスタンス化
 app = FastAPI()
@@ -39,6 +40,16 @@ stores = {
 #async def Hello():               # 『async def』で非同期処理,  『def』なら同期処理    
 #    return {"stores":"World!"}
 
+# 12/13MUST宿題
 @app.get("/store")
 async def get_stores():
     return {"stores": stores}
+
+# 12/13ADVANCED宿題
+@app.get('/api/get-image', response_class=StreamingResponse) #GETメソッドリクエストのエンドポイント設定
+async def get_image():                        #エンドポイント処理を定義
+    img = Image.open('templates/image/TECHFOODEXPROLERS_ER_Rev3.jpg')  #PILを使用して指定パスの画像ファイルを開く
+    img_io = BytesIO()                        #画像データを格納するバイトストリームを作成
+    img.save(img_io, 'PNG', quality=70)       #画像をJPEG形式で保存
+    img_io.seek(0)                            #バイトストリームの読み取り/書き込み位置をファイルの先頭に戻し
+    return StreamingResponse(img_io, media_type='image/png')  #send_file関数を使用して、画像をクライアントに送信
