@@ -19,12 +19,19 @@ const Stores = () =>{
     };
         
     //コンポーネントがマウントされた時に一度だけ画像をフェッチ
-    useEffect(() =>{fetchImage();},[]);
+    //useEffect(() =>{fetchImage();},[]);
 
     //画像が存在する場合はimgタグで表示
     return (
         <div>
-            {image && <img src={image} alt="Fetched Image"/>}
+            {/* image && <img src={image} alt="Fetched Image"/> */}
+            <div>『画像を取得』をクリックして下さい。</div>
+            {image ? (
+                <img src={image} alt="Fetched Image"/>
+            ) : (
+                <button style={{ color: 'blue' }} onClick={fetchImage}>『画像を取得』</button>
+            )}
+
         </div>
     );
 } ;
