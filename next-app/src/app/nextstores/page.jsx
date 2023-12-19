@@ -1,17 +1,15 @@
+'use client'
+
 import React, { useState, useEffect} from 'react';
 
+//Base64形式の画像を保持するstate(初期値"null")を用意
 const Stores = () =>{
     const [image, setImage] = useState(null);
-    
-    //コンポーネントのマウント時に画像をフェッチ
-    useEffect(() =>{
-        fetchImage();
-    },[]);
 
     //画像を非同期でフェッチする関数
     const fetchImage = async () => {
         // APIから画像取得
-        const response = await fetch('http://localhost:5000/api/get-image');
+        const response = await fetch('http://localhost:8000/api/get-image');
         // レスポンスをblob形式で取得
         const blob = await response.blob();
         // blobをBase64形式に変換
@@ -19,6 +17,9 @@ const Stores = () =>{
         // imageのstateを更新
         setImage(imageBase64);
     };
+        
+    //コンポーネントがマウントされた時に一度だけ画像をフェッチ
+    useEffect(() =>{fetchImage();},[]);
 
     //画像が存在する場合はimgタグで表示
     return (
@@ -27,9 +28,6 @@ const Stores = () =>{
         </div>
     );
 } ;
-
-// コンポーネントを "use client" でマーク
-Stores.useClient = true;
 
 export default Stores;
 
