@@ -23,7 +23,7 @@ export default function SearchMap(){
     const [searchWord, setSearchWord] = useState('');
     const [markerPoint, setMarkerPoint] = useState(center);
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyCzCWRo1T8I6JC_9C9LTafNKR_A-8W_VC4',
+        googleMapsApiKey: 'APIキー',
         libraries: ["places"],
     });
     const mapRef = useRef();
@@ -85,6 +85,7 @@ export default function SearchMap(){
             const request = {
                 location: pyrmont,   // 検索基準の位置
                 radius: 1000,        // 検索半径（メートル単位）
+                language:"ja",
                 type: "restaurant",  // 検索対象の施設の種類
                 keyword: searchWord, // 検索キーワード
             };
