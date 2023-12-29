@@ -1,17 +1,19 @@
 'use client'
-
 //機能インポート
 import React, { useCallback, useRef, useState } from 'react';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
 //関数・変数定義
-let Map = null;
+//let Map = null;
+let Map;
+
 //MAPコンテナスタイル
 const containerStyle = {
-    height: "100vh",
-    width: "358px",
+    height: "70vh",
+    width: "100%",
     position: "relative",
 };
+
 //MAP中心位置
 const center = {
     lat: 35.6813489,
@@ -35,23 +37,39 @@ export default function SearchMap(){
     if (!isLoaded) return "Loading...";
 
     async function getMapData() {
-        //getLat,getLng初期化
-        let getLat = 0;
-        let getLng = 0;
         try {
             const geocoder = new google.maps.Geocoder();
-            const results = await new Promise((resolve, reject) => {
-                geocoder.geocode({ address: searchWord }, (results, status) => {
-                    if (status === 'OK' && results) {
-                        resolve(results);
-                    } else {
-                        reject(new Error('Geocode failed'));
-                    }
+            let results;
+
+            if (searchWord.trim() === '') {
+                // searchWord が空の場合、東京駅の座標をセット
+                results = [
+                    {
+                        geometry: {
+                            location: {
+                                lat: 35.681298,
+                                lng: 139.766247,
+                            },
+                        },
+                    },
+                ];
+            } else {
+                // searchWord がある場合、geocode を実行
+                results = await new Promise((resolve, reject) => {
+                    geocoder.geocode({ address: searchWord }, (results, status) => {
+                        if (status === 'OK') {
+                            resolve(results);
+                        } else {
+                            // エラーでも resolve にすることで reject にならないようにする
+                            resolve([]);
+                        }
+                    });
                 });
-            });
+            }    
+
             if (results.length > 0) {
-                getLat = results[0].geometry.location.lat();
-                getLng = results[0].geometry.location.lng();
+                const getLat = results[0].geometry.location.lat();
+                const getLng = results[0].geometry.location.lng();
                 const newCenter = {
                     lat: getLat,
                     lng: getLng,
@@ -59,9 +77,10 @@ export default function SearchMap(){
                 setMarkerPoint(newCenter);
                 getNearshop(getLat, getLng);
             }
+
         } catch (error) {
-            alert('エラーが発生しました');
-            throw error;
+            console.error('エラーが発生しました', error);
+            alert('エラーが発生しました。詳細はコンソールを確認してください。');
         }
     }
 
@@ -146,37 +165,42 @@ export default function SearchMap(){
     }
 
     return (
-        <div>
-            <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '100' }}>
-            <div style={{ display: 'flex', alignItems: 'center', background: 'white', width: '320px', height: '83px', borderRadius: '5px', padding: '0 10px', border: '1px solid #ccc' }}>
-                <input
-                    id="standard-basic"
-                    label="今日何食べる？"
-                    type="text"
-                    value={searchWord}
-                    onChange={(e) => setSearchWord(e.target.value)}
-                    style={{ flex: 1, marginRight: '10px', border: '1px solid gray', outline: 'none', width: '260px', padding: '8px' }}
-                />
-                <button
-                    type="button"
-                    onClick={async() => await getMapData()}
-                    style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '10px 20px', cursor: 'pointer' }}
-                >
-                    検索
-                </button>
-            </div>
-            </div>
-            <div style={{ height: "70vh", width: "100%", position: 'relative' }}>
-                <GoogleMap
-                    id="map"
-                    mapContainerStyle={containerStyle}
-                    zoom={17}
-                    center={markerPoint}
-                    options={{ disableDefaultUI: true, zoomControl: true }}
-                    onLoad={onMapLoad}
-                >
-                    <Marker position={markerPoint} />
-                </GoogleMap>
+        <div className="mockup-phone">
+            <div className="camera"></div> 
+            <div className="display">
+                <div className="artboard artboard-demo phone-1">
+                    <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '100' }}>
+                        <div style={{ margin: 'auto', marginTop: '50px', display: 'flex', alignItems: 'center', background: 'white', width: '80%', height: '50px', borderRadius: '5px', padding: '10px 10px', border: '1px solid #ccc' }}>
+                            <input
+                                id="standard-basic"
+                                label="今日何食べる？"
+                                type="text"
+                                value={searchWord}
+                                onChange={(e) => setSearchWord(e.target.value)}
+                                style={{ flex: 1, marginRight: '10px', border: '1px solid gray', outline: 'none', width: '80%', padding: '3px' }}
+                            />
+                            <button
+                                type="button"
+                                onClick={async() => await getMapData()}
+                                style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' }}
+                            >
+                                検索
+                            </button>
+                        </div>
+                    </div>
+                        <div style={{ height: "70vh", width: "100%", position: 'relative' }}>
+                            <GoogleMap
+                                id="map"
+                                mapContainerStyle={containerStyle}
+                                zoom={15}
+                                center={markerPoint}
+                                options={{ disableDefaultUI: true, zoomControl: true }}
+                                onLoad={onMapLoad}
+                            >
+                                <Marker position={markerPoint} />
+                            </GoogleMap>
+                    </div>
+                </div>
             </div>
         </div>
     );
