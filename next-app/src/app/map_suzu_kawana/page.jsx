@@ -32,7 +32,7 @@ export default function SearchMap(){
     const [searchWord, setSearchWord] = useState('');
     const [markerPoint, setMarkerPoint] = useState(center);
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyCzCWRo1T8I6JC_9C9LTafNKR_A-8W_VC4',
+        googleMapsApiKey: 'APIキー',
         libraries: ["places"],
     });
     const mapRef = useRef();
@@ -129,7 +129,7 @@ export default function SearchMap(){
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             // コンソールに結果を出力
             console.log(results);
-            
+
             for (let i = 0; i < results.length; i++) {
                 createMarker(results[i]);
             }        
