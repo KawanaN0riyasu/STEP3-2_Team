@@ -96,3 +96,10 @@ async def places_nearby(
     # その他の非予測エラー表示
     except Exception as error:
         raise HTTPException(status_code=500, detail=f"Error: {error}")
+
+# NEXT.jsからデータを受け取る
+@app.post("/api/search")
+async def receive_search_data(search_data: dict):
+    # ここで受け取ったデータを処理する
+    print("Received search data:", search_data)
+    return {"message": "Data received successfully"}

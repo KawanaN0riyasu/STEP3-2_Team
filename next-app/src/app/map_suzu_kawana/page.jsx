@@ -2,9 +2,9 @@
 //機能インポート
 import React, { useCallback, useRef, useState } from 'react';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import sendSearchDataToServer from '../../Components/toFastAPI';
 
 //関数・変数定義
-//let Map = null;
 let Map;
 
 //MAPコンテナスタイル
@@ -20,12 +20,19 @@ const center = {
     lng: 139.7673068,
 };
 
+// customMarkerImageを事前に定義
+//const customMarkerImage = {
+    //url: 'URL_OF_YOUR_IMAGE',  // 画像のURLを指定
+    //scaledSize: new window.google.maps.Size(30, 30),  // 画像のサイズを指定
+//};
+
+
 //MAP検索設定
 export default function SearchMap(){
     const [searchWord, setSearchWord] = useState('');
     const [markerPoint, setMarkerPoint] = useState(center);
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'APIキー',
+        googleMapsApiKey: 'AIzaSyCzCWRo1T8I6JC_9C9LTafNKR_A-8W_VC4',
         libraries: ["places"],
     });
     const mapRef = useRef();
@@ -93,11 +100,10 @@ export default function SearchMap(){
 
             // 検索対象の位置を LatLng オブジェクトとして作成
             const pyrmont = new google.maps.LatLng(lat, lng);
-            
             // 地図を作成し、指定された位置を中心に表示
             Map = new google.maps.Map(document.getElementById('map'), {
                 center: pyrmont,
-                zoom: 17
+                zoom: 15
             });
             
             // 検索パラメータ設定
@@ -107,12 +113,10 @@ export default function SearchMap(){
                 language:"ja",
                 type: "restaurant",  // 検索対象の施設の種類
                 keyword: searchWord, // 検索キーワード
-            };
-            
+            };            
             // Google Places API を使用して近くの施設を検索
             const service = new google.maps.places.PlacesService(Map);
             service.nearbySearch(request, callback);
-
         } catch (error) {
             // エラーが発生した場合の処理
             console.error('エラーが発生しました', error);
@@ -123,9 +127,14 @@ export default function SearchMap(){
     // 検索結果の処理
     function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // コンソールに結果を出力
+            console.log(results);
+            
             for (let i = 0; i < results.length; i++) {
                 createMarker(results[i]);
-            }
+            }        
+            // 検索結果が得られたら、サーバーにデータを送信
+            sendSearchDataToServer(results);
         }
     }
 
@@ -138,6 +147,7 @@ export default function SearchMap(){
             position: place.geometry.location,
             title: place.name,
             label: place.name?.substr(0, 1),
+            //icon: customMarkerImage,  // カスタムアイコンを指定
             //optimized: false,
         });
         // インフォウィンドウ初期化
@@ -188,17 +198,17 @@ export default function SearchMap(){
                             </button>
                         </div>
                     </div>
-                        <div style={{ height: "70vh", width: "100%", position: 'relative' }}>
-                            <GoogleMap
-                                id="map"
-                                mapContainerStyle={containerStyle}
-                                zoom={15}
-                                center={markerPoint}
-                                options={{ disableDefaultUI: true, zoomControl: true }}
-                                onLoad={onMapLoad}
-                            >
-                                <Marker position={markerPoint} />
-                            </GoogleMap>
+                    <div style={{ height: "70vh", width: "100%", position: 'relative' }}>
+                        <GoogleMap
+                            id="map"
+                            mapContainerStyle={containerStyle}
+                            zoom={15}
+                            center={markerPoint}
+                            options={{ disableDefaultUI: true, zoomControl: true }}
+                            onLoad={onMapLoad}
+                        >
+                            <Marker position={markerPoint} />
+                        </GoogleMap>
                     </div>
                 </div>
             </div>
