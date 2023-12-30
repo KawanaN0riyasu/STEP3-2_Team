@@ -21,7 +21,7 @@ export default function SearchMap() {
   const [markerPoint, setMarkerPoint] = useState(center);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'APIキーをいれてください',
+    googleMapsApiKey: 'APIキーを入れてください',
     libraries: ["places"],
   });
   const mapRef = useRef();
@@ -32,33 +32,37 @@ export default function SearchMap() {
 
   if (loadError) return "Error";
   if (!isLoaded) return "Loading...";
-
   async function getMapData() {
     try {
       const geocoder = new google.maps.Geocoder();
       let getLat = 0;
       let getLng = 0;
-
+  
       const results = await new Promise((resolve, reject) => {
         geocoder.geocode({ address: searchWord }, (results, status) => {
           if (status === 'OK' && results) {
+            getLat = results[0].geometry.location.lat();
+            getLng = results[0].geometry.location.lng();
+            const newCenter = {
+              lat: getLat,
+              lng: getLng
+            };
+            setMarkerPoint(newCenter);
+            getNearshop(getLat, getLng);
             resolve(results);
           } else {
-            reject(new Error('Geocode failed'));
+            reject(new Error('住所情報が見つかりませんでした'));
+            const newCenter = {
+              lat: center.lat,
+              lng: center.lng
+            };
+            setMarkerPoint(newCenter);
+            getNearshop(newCenter.lat, newCenter.lng);
           }
         });
       });
-
-      getLat = results[0].geometry.location.lat();
-      getLng = results[0].geometry.location.lng();
-      const newCenter = {
-        lat: results[0].geometry.location.lat(),
-        lng: results[0].geometry.location.lng()
-      };
-      setMarkerPoint(newCenter);
-      getNearshop(getLat, getLng);
     } catch (error) {
-      alert('エラーが発生しました');
+      alert('住所情報がなかったため、東京駅を中心に検索します');
       throw error;
     }
   }
@@ -102,22 +106,23 @@ export default function SearchMap() {
     const marker = new google.maps.Marker({
       map: Map,
       position: place.geometry.location,
-      title: place.name,
-      label: place.name?.substr(0, 1),
+      animation: google.maps.Animation.DROP,
+      icon: {
+        url: place.photos[0].getUrl(),
+        scaledSize: new google.maps.Size(40, 40)
+      },
       optimized: false,
     });
 
     infoWindows[0] = new google.maps.InfoWindow();
 
-    const price = place.price_level ? place.price_level : '取得できませんでした';
-
     const infoList = [
       place.name,
-      `ランク：${place.rating}`,
-      `金額：${price}`,
       (place.photos && place.photos.length > 0) ?
-        `<p><img style="max-width:200px" src="${place.photos[0].getUrl()}"/></p>` : null
-    ];
+        `<p><img style="max-width:200px" src="${place.photos[0].getUrl()}"/></p>` : null,
+        `住所：${place.vicinity}`,
+        `種類：${place.types.join(',')}`,
+         ];
 
     const info = infoList.join('<br>');
     google.maps.event.addListener(marker, "click", () => {
