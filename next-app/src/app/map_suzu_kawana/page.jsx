@@ -137,7 +137,22 @@ export default function SearchMap(){
                 createMarker(results[i]);
             }        
             // 検索結果が得られたら、サーバーにデータを送信
-            sendSearchDataToServer(results);
+            // データの整形
+            const formattedResults = results.map(place => {
+                return {
+                    name: place.name,
+                    image: place.photos[0],
+                    status: place.business_status,
+                    location: {
+                        lat: place.geometry.location.lat,
+                        lng: place.geometry.location.lng
+                    },
+                    address: place.vicinity,
+                    rating: place.rating
+                    // 他に必要な情報を追加できます
+                };
+            });
+            sendSearchDataToServer(formattedResults);
         }
     }
 
