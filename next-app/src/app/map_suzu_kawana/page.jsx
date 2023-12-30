@@ -20,6 +20,9 @@ const center = {
     lng: 139.7673068,
 };
 
+// librariesを定義
+const libraries = ["places"];
+
 // customMarkerImageを事前に定義
 //const customMarkerImage = {
     //url: 'URL_OF_YOUR_IMAGE',  // 画像のURLを指定
@@ -32,8 +35,8 @@ export default function SearchMap(){
     const [searchWord, setSearchWord] = useState('');
     const [markerPoint, setMarkerPoint] = useState(center);
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'APIキー',
-        libraries: ["places"],
+        googleMapsApiKey: 'AIzaSyCzCWRo1T8I6JC_9C9LTafNKR_A-8W_VC4',
+        libraries: libraries,
     });
     const mapRef = useRef();
     const infoWindows = useRef([]);
