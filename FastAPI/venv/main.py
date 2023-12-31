@@ -18,6 +18,9 @@ origins = [
     #"通信するreactのアプリURLをここに入力",
     # local通信
     "http://localhost:3000",
+    "http://localhost:3000/map_suzu_kawana",
+    "*",
+
 ]
 
 # セキュリティ面のコード
@@ -25,13 +28,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,   # 許可するオリジン（ドメイン）のリスト
     allow_credentials=True,  # ブラウザからリクエスト受けた時の認証情報サーバー送信可否指定。Trueの場合は許可
-    allow_methods=["GET", "POST", "PUT", "DELETE"],     # 許可するHTTPメソッドリスト(Get,Post,Putなど) ["*"]と指定することですべてのHTTPメソッドを許可
+    allow_methods=["*"],     # 許可するHTTPメソッドリスト(Get,Post,Putなど) ["*"]と指定することですべてのHTTPメソッドを許可
     allow_headers=["*"],     # 許可するHTTPヘッダーリスト  ["*"]と指定することですべてのHTTPヘッダーを許可
 )
-
-class Location(BaseModel):
-    lat: float
-    lng: float
 
 class PlaceData(BaseModel):
     name: str
@@ -72,62 +71,15 @@ async def get_image():                        #エンドポイント処理を定
     img_io.seek(0)                            #バイトストリームの読み取り/書き込み位置をファイルの先頭に戻し
     return StreamingResponse(img_io, media_type='image/png')  #send_file関数を使用して、画像をクライアントに送信
 
+@app.get("/api/search")          # 『/』というURLにGetリクエスト来たら、
+async def Hello():               # 『async def』で非同期処理,  『def』なら同期処理    
+    return {"stores":"World!"}
 
-# 12/20宿題 GoogleAPIから情報取得
-@app.get("/places_nearby")
-async def places_nearby(
-    lat: float = Query(35.7122544, description="緯度"),  #浅草駅の経度を仮記入
-    lon: float = Query(139.7892628, description="経度"),  #浅草駅の緯度を仮記入
-    radius: int = Query(100, description="検索半径（メートル）"),
-    language: str = Query("ja", description="言語"),
-    keyword: str = Query("浅草 あんみつ", description="検索キーワード"),
-    api_key: str = Query("自身のAPIキー", description="Google Places APIキー")
-):
-    """
-    浅草駅から半径100m圏のあんみつ関連の店舗を検索するエンドポイント
-    """
-    base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-    params = {
-        "key": api_key,
-        "location": f"{lat},{lon}",
-        "radius": radius,
-        "language": language,
-        "keyword": keyword,
-    }
-
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(base_url, params=params)
-            response.raise_for_status()  # エラー発生時にhttpx.HTTPErrorを発生させる
-            return response.json()['results']
-        
-    # HTTPエラー表示
-    except httpx.HTTPError as http_error:
-        raise HTTPException(status_code=500, detail=f"Error: {http_error}")
-    # リクエストエラー表示（例: タイムアウト）
-    except httpx.RequestError as request_error:
-        raise HTTPException(status_code=500, detail=f"Request Error: {request_error}")
-    # その他の非予測エラー表示
-    except Exception as error:
-        raise HTTPException(status_code=500, detail=f"Error: {error}")
 
 # NEXT.jsからデータを受け取る
 @app.post("/api/search")
 async def receive_search_data(search_data: List[PlaceData]):
     try:
-        # データの整形
-        #processed_data = []
-        #for item in search_data:
-        #    processed_data.append({
-        #        "name": item.name,
-        #        "image": item.image,
-        #        "lat": item.lat,
-        #        "lng": item.lng,
-        #        "address": item.address,
-        #        "rating": item.rating,
-        #        "status": item.status,
-        #    })
-
         print("Received and processed search data:", search_data)
         return {"message": "Data received and processed successfully"}
     

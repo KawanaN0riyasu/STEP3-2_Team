@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>Search Result</title>
+</head>
+<body>
+    <h1>Search Result</h1>
+    <ul>
+        {% for data in search_data %}
+            <li>
+                <strong>{{ data.name }}</strong><br>
+                Image: <img src="{{ data.image }}" alt="Image"><br>
+                Location: ({{ data.lat }}, {{ data.lng }})<br>
+                Address: {{ data.address }}<br>
+                Rating: {{ data.rating }}<br>
+                Status: {{ data.status }}<br>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
