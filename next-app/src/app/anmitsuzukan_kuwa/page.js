@@ -1,7 +1,7 @@
+/*anmitsuzukan_kuwa*/
 /*import */
 import Link from 'next/link'
 import Image from 'next/image'
-import styles from '../page.module.css'
 
 /*メタデータ */
 export const metadata = {
@@ -13,12 +13,13 @@ export const metadata = {
 export default function Page(){
     return(
         <>
-        {/*スマホサイズ指定 */}
+        {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
         <div className="artboard phone-4">
 
-        {/*図鑑タイトル*/}
-        <h1 className="card-title text-md mt-2 mb-2">浅草×あんみつ図鑑</h1>
+        {/*図鑑タイトル→DB呼び出し*/}
+        <h1 className="card-title text-md mt-2 mb-2">浅草あんみつ図鑑</h1>
         
+        {/*図鑑コメント、図鑑表紙→DB呼び出し*/}
         <div className="flex items-center mt-2 mb-2">
             <p className="text-xs">東京に友達が来た時、一緒に行くあんみつ屋さんまとめ図鑑。有名どころ&老舗多め。</p>
             <figure>
@@ -26,27 +27,27 @@ export default function Page(){
             </figure>
         </div>  
 
-        {/*数値データ*/}
-        <div className="flex-none flex items-center bg-orange-100 pt-3 pb-3">
+        {/*数値データ→DB呼び出し*/}
+        <div className="flex-none flex items-center bg-orange-100 pt-3 pb-3 rounded-md">
 
             <div className="flex-none flex-grow flex flex-col items-center">  
             <button className="btn btn-sm btn-outline mb-1">行った</button>
-            <p className="text-xl font-bold">10</p>
+            <p className="text-xl font-bold">10軒</p>
             </div>
 
             <div className="flex-none flex-grow flex flex-col items-center"> 
             <button className="btn btn-sm btn-outline mb-1">これから</button>
-            <p className="text-xl font-bold">25</p>
+            <p className="text-xl font-bold">25軒</p>
             </div>
 
             <div className="flex-none flex-grow flex flex-col items-center"> 
             <button className="btn btn-sm btn-outline mb-1">達成率</button>
-            <p className="text-xl font-bold">40</p>
+            <p className="text-xl font-bold">40%</p>
             </div>
 
             <div className="flex-none flex-grow flex flex-col items-center"> 
             <button className="btn btn-sm btn-outline mb-1">登録数</button>
-            <p className="text-xl font-bold">03</p>
+            <p className="text-xl font-bold">03人</p>
             </div>
 
         </div>
@@ -116,10 +117,7 @@ export default function Page(){
         <div className="flex-none flex items-center bg-orange-100 pt-3 pb-3">
 
             <div className="flex-none flex-grow flex flex-col items-center">  
-            <Image src="/images/profile_icon.png"
-            width={30}
-            height={30}
-            alt="profile_icon"/>
+            <Image src="/images/profile_icon.png" width={30} height={30} alt="profile_icon"/>
             </div>
 
             <div className="flex-none flex-grow flex flex-col items-center"> 
