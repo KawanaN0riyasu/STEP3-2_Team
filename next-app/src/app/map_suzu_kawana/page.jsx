@@ -139,16 +139,23 @@ export default function SearchMap(){
             // 検索結果が得られたら、サーバーにデータを送信
             // データの整形
             const formattedResults = results.map(place => {
+                //画像URLの取得
+                let imageUrl = null;
+                if (place.photos && place.photos.length > 0) {
+                    imageUrl = place.photos[0].getUrl();
+                    console.log('Image URL:', imageUrl);
+                } else {
+                    console.log('No image available for this place.');
+                }
+
                 return {
                     name: place.name,
-                    image: place.photos[0],
+                    image: imageUrl,
                     status: place.business_status,
-                    location: {
-                        lat: place.geometry.location.lat,
-                        lng: place.geometry.location.lng
-                    },
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng(),
                     address: place.vicinity,
-                    rating: place.rating
+                    rating: place.rating,
                     // 他に必要な情報を追加できます
                 };
             });

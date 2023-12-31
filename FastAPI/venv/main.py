@@ -6,7 +6,7 @@ from io import BytesIO
 import googlemaps
 import pprint
 import httpx
-from typing import Dict, List, Union
+from typing import List
 from pydantic import BaseModel
 
 # FastAPIインスタンス化
@@ -33,12 +33,14 @@ class Location(BaseModel):
     lat: float
     lng: float
 
-class Geometry(BaseModel):
-    location: Location
-
 class PlaceData(BaseModel):
-    business_status: str
-    geometry: Geometry
+    name: str
+    image: str
+    lat: float
+    lng: float
+    adress: str
+    rating: float
+    status: str
 
 # 12/14宿題対応
 stores = {
@@ -111,33 +113,22 @@ async def places_nearby(
 
 # NEXT.jsからデータを受け取る
 @app.post("/api/search")
-async def receive_search_data(search_data: List[Dict[str, Union[str, Dict[str, Dict[str, float]]]]]):
+async def receive_search_data(search_data: List[PlaceData]):
     try:
         # データの整形
-        processed_data = []
-        for item in search_data:
-            image_data = item.get("image", {})
-            rating_data = item.get("rating", {})
-            
-            # imageとratingを文字列に変換
-            image_str = image_data.get("str", "")
-            rating_str = rating_data.get("str", "")
-            
-            # 必要な情報を抽出して処理する例
-            business_status = item.get('business_status', '')
-            location = item.get('geometry', {}).get('location', {})
-            lat = location.get('lat', 0.0)
-            lng = location.get('lng', 0.0)
-            
-            processed_data.append({
-                "business_status": business_status,
-                "lat": lat,
-                "lng": lng,
-                "image": image_str,
-                "rating": rating_str,
-            })
+        #processed_data = []
+        #for item in search_data:
+        #    processed_data.append({
+        #        "name": item.name,
+        #        "image": item.image,
+        #        "lat": item.lat,
+        #        "lng": item.lng,
+        #        "address": item.address,
+        #        "rating": item.rating,
+        #        "status": item.status,
+        #    })
 
-        print("Received and processed search data:", processed_data)
+        print("Received and processed search data:", search_data)
         return {"message": "Data received and processed successfully"}
     
     except Exception as e:
