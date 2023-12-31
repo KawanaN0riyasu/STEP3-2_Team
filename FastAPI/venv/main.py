@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query# FastAPI読み込み
+from fastapi import FastAPI, HTTPException, Query # FastAPI読み込み
 from fastapi.middleware.cors import CORSMiddleware  # FastAPIが提供するCORS処理ミドルウェア(通信時に使うセキュリティ関連ライブラリ)
 from fastapi.responses import StreamingResponse
 from PIL import Image
@@ -38,7 +38,7 @@ class PlaceData(BaseModel):
     image: str
     lat: float
     lng: float
-    adress: str
+    address: str
     rating: float
     status: str
 

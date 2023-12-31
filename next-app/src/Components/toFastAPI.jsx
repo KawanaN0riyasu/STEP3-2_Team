@@ -1,7 +1,7 @@
 async function sendSearchDataToServer(searchData) {
     try {
         // 送信するデータをコンソールに表示
-        console.log('Sending data to server:', searchData);
+        console.log('Sending data to server:', JSON.stringify(searchData));
 
         // サーバーに対してPOSTリクエストを送信
         const response = await fetch('http://localhost:8000/api/search', {

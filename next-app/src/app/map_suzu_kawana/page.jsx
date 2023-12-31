@@ -9,7 +9,7 @@ let Map;
 
 //MAPコンテナスタイル
 const containerStyle = {
-    height: "70vh",
+    height: "100%",
     width: "100%",
     position: "relative",
 };
@@ -170,22 +170,22 @@ export default function SearchMap(){
         const marker = new google.maps.Marker({
             map: Map,
             position: place.geometry.location,
-            title: place.name,
-            label: place.name?.substr(0, 1),
-            //icon: customMarkerImage,  // カスタムアイコンを指定
-            //optimized: false,
+            icon: {
+                url: place.photos && place.photos.length > 0 ? place.photos[0].getUrl() : 'URLが見つかりません',
+                scaledSize: new google.maps.Size(40, 40)
+            },
+            optimized: false,
         });
         // インフォウィンドウ初期化
         infoWindows[0] = new google.maps.InfoWindow();
 
         // 施設情報を表示するための情報リスト作成
-        const price = place.price_level ? place.price_level : '取得できませんでした';
         const infoList = [
             place.name,
-            `ランク：${place.rating}`,
-            `金額：${price}`,
             (place.photos && place.photos.length > 0) ?
-            `<p><img style="max-width:200px" src="${place.photos[0].getUrl()}"/></p>` : null
+            `<p><img style="max-width:200px" src="${place.photos[0].getUrl()}"/></p>` : null,
+            `住所：${place.vicinity}`,
+            `種類：${place.types.join(',')}`,
         ];
 
         // マーカーがクリックされた時のインフォウィンドウ表示
@@ -223,13 +223,13 @@ export default function SearchMap(){
                             </button>
                         </div>
                     </div>
-                    <div style={{ height: "70vh", width: "100%", position: 'relative' }}>
+                    <div style={{ height: "100%", width: "100%", position: 'relative' }}>
                         <GoogleMap
                             id="map"
-                            mapContainerStyle={containerStyle}
-                            zoom={15}
+                            mapContainerStyle={{ width: '100%', height: '100%' }}
+                            zoom={14}
                             center={markerPoint}
-                            options={{ disableDefaultUI: true, zoomControl: true }}
+                            options={{ disableDefaultUI: true, zoomControl: false}}
                             onLoad={onMapLoad}
                         >
                             <Marker position={markerPoint} />
