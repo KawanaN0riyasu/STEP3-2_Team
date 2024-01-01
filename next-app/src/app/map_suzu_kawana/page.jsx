@@ -1,8 +1,9 @@
 'use client'
 //機能インポート
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useContext } from 'react';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
-import sendSearchDataToServer from '../../Components/toFastAPI';
+import sendSearchDataToServer from '../../components/toFastAPI';
+import { useRouter } from 'next/navigation';
 
 //関数・変数定義
 let Map;
@@ -23,13 +24,6 @@ const center = {
 // librariesを定義
 const libraries = ["places"];
 
-// customMarkerImageを事前に定義
-//const customMarkerImage = {
-    //url: 'URL_OF_YOUR_IMAGE',  // 画像のURLを指定
-    //scaledSize: new window.google.maps.Size(30, 30),  // 画像のサイズを指定
-//};
-
-
 //MAP検索設定
 export default function SearchMap(){
     const [searchWord, setSearchWord] = useState('');
@@ -41,6 +35,8 @@ export default function SearchMap(){
     const mapRef = useRef();
     const infoWindows = useRef([]);
     const onMapLoad = useCallback((map) => {mapRef.current = map;}, []);
+    const [showCreateBookButton, setShowCreateBookButton] = useState(false);
+    const router = useRouter();
 
     //MAP読み込めない場合の表示
     if (loadError) return "Error";
@@ -106,7 +102,9 @@ export default function SearchMap(){
             // 地図を作成し、指定された位置を中心に表示
             Map = new google.maps.Map(document.getElementById('map'), {
                 center: pyrmont,
-                zoom: 15
+                zoom: 15,
+                zoomControl: false,
+                disableDefaultUI: true,
             });
             
             // 検索パラメータ設定
@@ -159,6 +157,10 @@ export default function SearchMap(){
                     // 他に必要な情報を追加できます
                 };
             });
+
+            // 検索結果が得られたら、ボタンを表示する
+            setShowCreateBookButton(true);
+            
             sendSearchDataToServer(formattedResults);
         }
     }
@@ -199,6 +201,13 @@ export default function SearchMap(){
         });
     }
 
+    // ボタンをクリックした時の処理
+    function handleCreateBookClick() {
+    // 図鑑を作成するための処理をここに追加
+        console.log('Create book button clicked!');
+        router.push('/02_createZukanList');
+    }
+
     return (
         <div className="mockup-phone">
             <div className="camera"></div> 
@@ -234,6 +243,18 @@ export default function SearchMap(){
                         >
                             <Marker position={markerPoint} />
                         </GoogleMap>
+                        {/* 図鑑作成ボタン */}
+                        {showCreateBookButton && (
+                            <div style={{ position: 'absolute', bottom: '30px', right: '20px', zIndex: '100' }}>
+                                <button
+                                    type="button"
+                                    onClick={handleCreateBookClick}
+                                    style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' }}
+                                >
+                                    図鑑作成
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
