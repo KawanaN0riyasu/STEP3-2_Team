@@ -1,39 +1,69 @@
 'use client'
-import React, {useState}  from 'react';
-import { useRouter } from 'next/navigation';
+import React, {useState, useEffect}  from 'react';
 
 const Card = () => {
-  // アルバム情報のための状態
-  const [formattedResults, setFormattedResults] = useState("アルバム情報はここに入ります");
-  
-  // メッセージを表示するための状態
-  const [showMessage, setShowMessage] = useState(false);
+  const [parsedData, setParsedData] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
 
-  // ボタンクリックを処理する関数
-  const handleButtonClick = () => {
-    setShowMessage(true);
+  // ローカルストレージからデータを取得する関数
+  useEffect(() => {
+    const searchList = localStorage.getItem("searchList");
+    if (searchList) {
+      // localStorageにデータが存在する場合
+      try {
+        const parsedDataFromLocalStorage = JSON.parse(searchList);
+        console.log("localStorageにあるデータ:", parsedDataFromLocalStorage);
+        setParsedData(parsedDataFromLocalStorage);
+
+        // 初期状態で全てのチェックボックスをONにする
+        setCheckedItems(Array(parsedDataFromLocalStorage.length).fill(true));
+
+      } catch (error) {
+          console.error('JSONパースエラー:', error);
+      }
+    } else {
+      // localStorageにデータが存在しない場合
+      console.log("localStorageにデータがありません");
+    }
+  }, []); // マウント時にのみ実行
+
+  const handleCheckboxChange = (index) => {
+    // チェックボックスの状態を更新
+    const newCheckedItems = [...checkedItems];
+    newCheckedItems[index] = !newCheckedItems[index];
+    setCheckedItems(newCheckedItems);
   };
 
   return (
     <div>
-      <div>図鑑登録するお店に✔を入れてください。</div>
-      <div className="card lg:card-side bg-base-100 shadow-xl">
-        <figure><img src="https://daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.jpg" alt="Album"/></figure>
-        <div className="card-body">
-          <h2 className="card-title">New album is released!</h2>
-          {/* formattedResults を表示する */}
-          <p>{formattedResults}</p>
-          <div className="card-actions justify-end">
-            <button className="btn btn-active btn-accent">✓</button>
-          </div>
-          {/* showMessage が true の場合は成功メッセージを表示 */}
-          {showMessage && (
-            <div className="alert alert-success mt-4">
-              ボタンをクリックしました！ これでアルバムを聴くことができます。
+      <div style={{ fontSize: '24px' }}>図鑑登録するお店に✅を入れてください。</div>
+      {parsedData.map((item, index) => (
+        <div key={index} className="card lg:card-side bg-base-100 shadow-xl" style={{ height: '400px', width: '80%', marginBottom: '10px', display: 'flex' }}>
+          <figure style={{ width: '50%', flex: '0 0 50%', boxSizing: 'border-box' }}>
+            <img src={item.image} alt={`Album ${index + 1} `} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </figure>
+          <div className="card-body" style={{ width: '50%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' }}>
+            <h2 className="card-title"style={{ fontSize: '24px' }}>{item.name}</h2>
+            <p> ●運用状況: {item.status}</p>
+            <p> ●住所: {item.address}</p>
+            <p> ●ユーザー評価: {item.rating}</p>
+            <div className="card-actions">
+              <label>
+                <span> ●図鑑登録: </span>
+                <input
+                  type="checkbox"
+                  checked={checkedItems[index]}
+                  onChange={() => handleCheckboxChange(index)}
+                  style={{ 
+                    width: '30px', 
+                    height: '30px',
+                  }}
+                />
+              </label>
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 };

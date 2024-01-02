@@ -1,6 +1,6 @@
 'use client'
 //機能インポート
-import React, { useCallback, useRef, useState, useContext } from 'react';
+import React, { useCallback, useRef, useState} from 'react';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import sendSearchDataToServer from '../../components/toFastAPI';
 import { useRouter } from 'next/navigation';
@@ -147,6 +147,7 @@ export default function SearchMap(){
                 }
 
                 return {
+                    id: place.place_id,
                     name: place.name,
                     image: imageUrl,
                     status: place.business_status,
@@ -158,11 +159,30 @@ export default function SearchMap(){
                 };
             });
 
-            // 検索結果が得られたら、ボタンを表示する
+            //  localStorageに整形データを保存する。
+            localStorage.setItem("searchList", JSON.stringify(formattedResults))
+            // 「図鑑作成」ボタンを表示する。
             setShowCreateBookButton(true);
-            
+            // 整形データをサーバーに送る。
             sendSearchDataToServer(formattedResults);
         }
+    }
+
+    // localStorageに格納したデータの確認
+    const storedData = localStorage.getItem("searchList");
+
+    if (storedData) {
+        // localStorageにデータが存在する場合
+        let parsedData;
+        try {
+            parsedData = JSON.parse(storedData);
+            console.log("localStorageにあるデータ:", parsedData);
+        } catch (error) {
+            console.error('JSONパースエラー:', error);
+        }
+    } else {
+        // localStorageにデータが存在しない場合
+        console.log("localStorageにデータがありません");
     }
 
     // 検索結果にマーカーを生成
