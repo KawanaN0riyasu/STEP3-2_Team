@@ -29,7 +29,7 @@ export default function SearchMap(){
     const [searchWord, setSearchWord] = useState('');
     const [markerPoint, setMarkerPoint] = useState(center);
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'APIキーを入力する',
+        googleMapsApiKey: 'AIzaSyCzCWRo1T8I6JC_9C9LTafNKR_A-8W_VC4',
         libraries: libraries,
     });
     const mapRef = useRef();

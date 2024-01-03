@@ -42,7 +42,7 @@ const Card = () => {
   function handleReturnClick() {
     // 図鑑を作成するための処理をここに追加
     console.log('Return button clicked!');
-    router.push('/map_suzu_kawana');
+    router.push('/02_mapSearch');
   }
   
   // ポップアップの表示制御
@@ -64,6 +64,12 @@ const Card = () => {
       <p>チェックしたお店は{checkedItems.filter((item) => item).length}件です。</p>
       <p>図鑑登録を進めても良いですか？</p>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+        <button
+          onClick={closeConfirmationPopup}
+          style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' }}
+        >
+          戻る
+        </button>
         <button
           style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' }}
           onClick={() => {
@@ -87,16 +93,10 @@ const Card = () => {
               console.log("localStorageへのデータ転送に失敗しました");
             }
             closeConfirmationPopup(); // 処理完了後にポップアップを閉じる
-            router.push('/03_createZukanTitle');
+            router.push('/04_createZukanTitle');
           }}
         >
           進む
-        </button>
-        <button
-          onClick={closeConfirmationPopup}
-          style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' }}
-        >
-          戻る
         </button>
       </div>
     </div>
