@@ -1,13 +1,17 @@
-from fastapi import FastAPI, HTTPException, Query # FastAPI読み込み
+from fastapi import FastAPI, HTTPException, Depends, Query # FastAPI読み込み
 from fastapi.middleware.cors import CORSMiddleware  # FastAPIが提供するCORS処理ミドルウェア(通信時に使うセキュリティ関連ライブラリ)
 from fastapi.responses import StreamingResponse
 from PIL import Image
 from io import BytesIO
-import googlemaps
-import pprint
-import httpx
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
+from db_control import crud, models, schemas
+from database import SessionLocal, engine, get_db
+import logging
+
+models.Base.metadata.create_all(bind=engine)
+logger = logging.getLogger(__name__)
 
 # FastAPIインスタンス化
 app = FastAPI()
@@ -19,8 +23,8 @@ origins = [
     # local通信
     "http://localhost:3000",
     "http://localhost:3000/map_suzu_kawana",
+    "http://localhost:3000/04_createZukanTitle",
     "*",
-
 ]
 
 # セキュリティ面のコード
@@ -33,34 +37,24 @@ app.add_middleware(
 )
 
 class PlaceData(BaseModel):
+    GMid: str
     name: str
-    image: str
+    image: Optional[str]
     lat: float
     lng: float
     address: str
     rating: float
     status: str
 
-# 12/14宿題対応
-stores = {
-    "name": "Store1",
-    "items": [
-        {
-            "name": "Chair",
-            "price": 15.99
-        }
-    ]
-}
+class ZukanData(BaseModel):
+    zukan_name: str
+    zukan_image: Optional[str] 
+    zukan_memo: Optional[str]
 
 # ローカルサーバー(http://127.0.0.1:8000)にリクエストが来た時の処理    ※ターミナルにて『uvicorn main:app --reload』実行でローカルサーバー開く
 @app.get("/")                    # 『/』というURLにGetリクエスト来たら、
 async def Hello():               # 『async def』で非同期処理,  『def』なら同期処理    
     return {"stores":"World!"}
-
-# 12/13MUST宿題
-@app.get("/store")
-async def get_stores():
-    return {"stores": stores}
 
 # 12/13ADVANCED宿題
 @app.get('/api/get-image', response_class=StreamingResponse) #GETメソッドリクエストのエンドポイント設定
@@ -71,11 +65,6 @@ async def get_image():                        #エンドポイント処理を定
     img_io.seek(0)                            #バイトストリームの読み取り/書き込み位置をファイルの先頭に戻し
     return StreamingResponse(img_io, media_type='image/png')  #send_file関数を使用して、画像をクライアントに送信
 
-@app.get("/api/search")          # 『/』というURLにGetリクエスト来たら、
-async def Hello():               # 『async def』で非同期処理,  『def』なら同期処理    
-    return {"stores":"World!"}
-
-
 # NEXT.jsからデータを受け取る
 @app.post("/api/search")
 async def receive_search_data(search_data: List[PlaceData]):
@@ -85,3 +74,48 @@ async def receive_search_data(search_data: List[PlaceData]):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
+
+# NEXT.jsからデータを受け取る
+@app.post("/restaurants")
+async def create_restaurant(RestaurantDataJson: List[PlaceData], db: Session = Depends(get_db)):
+    try:
+        db_restaurants = []
+        for restaurant_data_item in RestaurantDataJson:
+            db_restaurant = models.Zukan(
+                gmplace_id = restaurant_data_item.GMid, 
+                name = restaurant_data_item.name, 
+                image = restaurant_data_item.image,
+                lat = restaurant_data_item.lat, 
+                lng = restaurant_data_item.lng, 
+                address = restaurant_data_item.address,
+                rating = restaurant_data_item.rating,
+                status = restaurant_data_item.status,
+            )
+            db.add(db_restaurant)
+            db_restaurants.append(db_restaurant)
+
+        db.commit()
+        db.refresh(db_restaurants)
+
+        return db_restaurants 
+    
+    except Exception as e:
+        logger.error(f"Error processing data: {e}")
+        raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
+
+
+# NEXT.jsからデータを受け取る
+@app.post("/zukans")
+async def create_zukan(ZukanDataJson: List[ZukanData], db: Session = Depends(get_db)):
+    try:
+        for zukan_data_item in ZukanDataJson:
+            db_zukan = models.Zukan(title=zukan_data_item.zukan_name, image=zukan_data_item.zukan_image, description=zukan_data_item.zukan_memo)
+            db.add(db_zukan)
+            db.commit()
+            db.refresh(db_zukan)
+        return db_zukan 
+    
+    except Exception as e:
+        logger.error(f"Error processing data: {e}")
+        raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
+

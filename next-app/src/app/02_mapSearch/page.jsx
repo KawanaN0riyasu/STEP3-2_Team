@@ -147,7 +147,7 @@ export default function SearchMap(){
                 }
 
                 return {
-                    id: place.place_id,
+                    GMid: place.place_id,
                     name: place.name,
                     image: imageUrl,
                     status: place.business_status,
@@ -271,7 +271,7 @@ export default function SearchMap(){
                                     onClick={handleCreateBookClick}
                                     style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' }}
                                 >
-                                    図鑑作成
+                                    リストを見る
                                 </button>
                             </div>
                         )}

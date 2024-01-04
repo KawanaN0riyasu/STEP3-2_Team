@@ -31,7 +31,7 @@ const MenuButton = ({ title, onClick }) => {
         <button
             style={{
                 width: '100%',
-                height: '100%',
+                height: '90%',
                 fontSize: '16px',
                 borderRadius: '8px',
                 backgroundColor: backgroundColor, 

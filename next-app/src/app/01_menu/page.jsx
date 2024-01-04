@@ -20,7 +20,7 @@ const Menu = () => {
                         flexWrap: 'wrap',
                         justifyContent: 'space-around',
                         alignItems: 'center',
-                        height: '60vh',
+                        height: '70vh',
                         width: '95%',
                     }}
                 >
