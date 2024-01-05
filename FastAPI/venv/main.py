@@ -12,6 +12,15 @@ import logging
 
 models.Base.metadata.create_all(bind=engine)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# コンソールハンドラを追加
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+
+# ロガーにハンドラを追加
+logger.handlers.clear()
+logger.addHandler(console_handler)
 
 # FastAPIインスタンス化
 app = FastAPI()
@@ -81,7 +90,7 @@ async def create_restaurant(RestaurantDataJson: List[PlaceData], db: Session = D
     try:
         db_restaurants = []
         for restaurant_data_item in RestaurantDataJson:
-            db_restaurant = models.Zukan(
+            db_restaurant = models.Restaurant(
                 gmplace_id = restaurant_data_item.GMid, 
                 name = restaurant_data_item.name, 
                 image = restaurant_data_item.image,
@@ -93,29 +102,31 @@ async def create_restaurant(RestaurantDataJson: List[PlaceData], db: Session = D
             )
             db.add(db_restaurant)
             db_restaurants.append(db_restaurant)
-
         db.commit()
-        db.refresh(db_restaurants)
+        for db_restaurant in db_restaurants:
+            db.refresh(db_restaurant)
 
         return db_restaurants 
     
     except Exception as e:
-        logger.error(f"Error processing data: {e}")
+        logger.error(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
-
 
 # NEXT.jsからデータを受け取る
 @app.post("/zukans")
 async def create_zukan(ZukanDataJson: List[ZukanData], db: Session = Depends(get_db)):
     try:
+        db_zukans = []
         for zukan_data_item in ZukanDataJson:
             db_zukan = models.Zukan(title=zukan_data_item.zukan_name, image=zukan_data_item.zukan_image, description=zukan_data_item.zukan_memo)
             db.add(db_zukan)
-            db.commit()
+            db_zukans.append(db_zukan)
+        db.commit()
+        for db_zukan in db_zukans:
             db.refresh(db_zukan)
-        return db_zukan 
+
+        return db_zukans 
     
     except Exception as e:
-        logger.error(f"Error processing data: {e}")
+        logger.error(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
-

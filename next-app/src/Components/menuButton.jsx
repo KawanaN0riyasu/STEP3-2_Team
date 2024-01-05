@@ -42,6 +42,7 @@ const MenuButton = ({ title, onClick }) => {
                 flexDirection: 'column', // 縦方向に配置
                 justifyContent: 'center',
                 alignItems: 'center',
+                WebkitTextSizeAdjust: '100%',
             }}
             onClick={onClick}
         >

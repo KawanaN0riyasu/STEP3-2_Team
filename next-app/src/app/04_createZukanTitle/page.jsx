@@ -9,43 +9,23 @@ const registerZukan = (e) => {
   const[zukan_memo, setMemo] =useState("東京に友達が来た時、一緒に行くあんみつ屋さんまとめ図鑑。有名どころ&老舗多め。")
   const router = useRouter();
   const [parsedData, setParsedData] = useState([]);
+  // localStorageの利用可能性を確認
+  const parsedDataFromLocalStorage = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("registerList")) : null;
 
-  const fetchData = async () => {
-    const registerList = localStorage.getItem("registerList");
-    if (registerList) {
-      try {
-        const parsedDataFromLocalStorage = JSON.parse(registerList);
-        console.log("localStorageにあるデータ:", parsedDataFromLocalStorage);
-        setParsedData(parsedDataFromLocalStorage);
-        await fetch("http://localhost:8000/restaurants",{
-          method:"POST",
-          headers:{"Content-Type": "application/json" },
-          body: JSON.stringify(parsedDataFromLocalStorage),
-        })
-      } catch (error) {
-        console.error('JSONパースエラー:', error);
-      }
-    } else {
-      // localStorageにデータが存在しない場合
-      console.log("localStorageにデータがありません");
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const zukanSubmit = async (e) => {
     e.preventDefault();
-    console.log("送信するデータ:", {
+    console.log("送信する図鑑データ:", {
       zukan_name: zukan_name,
       zukan_image: null,
       zukan_memo: zukan_memo,
     });
 
+    console.log("送信する店舗データ:", parsedDataFromLocalStorage);
+    setParsedData(parsedDataFromLocalStorage);
+
     try{
-      await fetch("http://localhost:8000/zukans",
-      {
+      const responseZukan = await fetch("http://localhost:8000/zukans", {
         method:"POST",
         headers:{"Content-Type": "application/json" },
         body: JSON.stringify([
@@ -56,6 +36,23 @@ const registerZukan = (e) => {
           }
         ]),
       });
+
+      if (!responseZukan.ok) {
+        throw new Error(`Zukan APIエラー: ${responseZukan.status}`);
+      }
+
+      const responseRestaurants = await fetch("http://localhost:8000/restaurants",{
+        method:"POST",
+        headers:{"Content-Type": "application/json" },
+        body: JSON.stringify(parsedDataFromLocalStorage),
+      });
+
+      if (!responseRestaurants.ok) {
+        throw new Error(`Restaurants APIエラー: ${responseRestaurants.status}`);
+      }
+
+      localStorage.removeItem("registerList");
+
     }catch(err){
       console.error("エラー:", err);
     }

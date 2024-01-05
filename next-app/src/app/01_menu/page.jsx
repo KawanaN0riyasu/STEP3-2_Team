@@ -22,6 +22,7 @@ const Menu = () => {
                         alignItems: 'center',
                         height: '70vh',
                         width: '95%',
+                        textAlign: 'center', // text-align を追加
                     }}
                 >
                     <h1 style={{ 
@@ -36,7 +37,9 @@ const Menu = () => {
                     }}>
                         もぐもぐ図鑑 Menu
                     </h1>
-                    <Link href="/02_mapSearch"
+                    <Link 
+                        href="/02_mapSearch" 
+                        passHref 
                         style={{
                             width: '48%',
                             height: '40%',
@@ -47,6 +50,7 @@ const Menu = () => {
                     </Link>
                     <Link 
                         href="/02_mapSearch"
+                        passHref 
                         style={{
                             width: '48%',
                             height: '40%',
@@ -57,6 +61,7 @@ const Menu = () => {
                     </Link>
                     <Link 
                         href="/02_mapSearch"
+                        passHref 
                         style={{
                             width: '48%',
                             height: '40%',
@@ -67,6 +72,7 @@ const Menu = () => {
                     </Link>
                     <Link 
                         href="/02_mapSearch"
+                        passHref 
                         style={{
                             width: '48%',
                             height: '40%',

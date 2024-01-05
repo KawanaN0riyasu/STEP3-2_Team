@@ -16,7 +16,6 @@ const Card = () => {
       // localStorageにデータが存在する場合
       try {
         const parsedDataFromLocalStorage = JSON.parse(searchList);
-        console.log("localStorageにあるデータ:", parsedDataFromLocalStorage);
         setParsedData(parsedDataFromLocalStorage);
 
         // 初期状態で全てのチェックボックスをONにする
@@ -76,6 +75,7 @@ const Card = () => {
             const checkedItemsIndexes = checkedItems.map((item, index) => (item ? index : -1)).filter((index) => index !== -1);
             const selectedShops = checkedItemsIndexes.map((index) => parsedData[index]);
             // localStorageに整形データを保存する。
+            localStorage.removeItem("registerList");
             localStorage.setItem("registerList", JSON.stringify(selectedShops))
             // localStorageに格納したデータの確認
             const storedData = localStorage.getItem("registerList");

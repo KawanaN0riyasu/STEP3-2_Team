@@ -1,6 +1,6 @@
 'use client'
 //機能インポート
-import React, { useCallback, useRef, useState} from 'react';
+import React, { useCallback, useRef, useState, useEffect} from 'react';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import sendSearchDataToServer from '../../components/toFastAPI';
 import { useRouter } from 'next/navigation';
@@ -37,6 +37,8 @@ export default function SearchMap(){
     const onMapLoad = useCallback((map) => {mapRef.current = map;}, []);
     const [showCreateBookButton, setShowCreateBookButton] = useState(false);
     const router = useRouter();
+
+    let formattedResults = [];
 
     //MAP読み込めない場合の表示
     if (loadError) return "Error";
@@ -134,14 +136,17 @@ export default function SearchMap(){
             for (let i = 0; i < results.length; i++) {
                 createMarker(results[i]);
             }        
+
+            // 重複をチェックするためのSetを作成
+            const existingIds = new Set(formattedResults.map(place => place.GMid));
+
             // 検索結果が得られたら、サーバーにデータを送信
             // データの整形
-            const formattedResults = results.map(place => {
+            formattedResults = formattedResults.concat(results.filter(place => !existingIds.has(place.place_id)).map(place => {
                 //画像URLの取得
                 let imageUrl = null;
                 if (place.photos && place.photos.length > 0) {
                     imageUrl = place.photos[0].getUrl();
-                    console.log('Image URL:', imageUrl);
                 } else {
                     console.log('No image available for this place.');
                 }
@@ -157,32 +162,18 @@ export default function SearchMap(){
                     rating: place.rating,
                     // 他に必要な情報を追加できます
                 };
-            });
+            }));
 
             //  localStorageに整形データを保存する。
-            localStorage.setItem("searchList", JSON.stringify(formattedResults))
+            if (typeof window !== 'undefined'){
+                localStorage.removeItem("searchList");
+                localStorage.setItem("searchList", JSON.stringify(formattedResults))
+            }
             // 「図鑑作成」ボタンを表示する。
             setShowCreateBookButton(true);
             // 整形データをサーバーに送る。
             sendSearchDataToServer(formattedResults);
         }
-    }
-
-    // localStorageに格納したデータの確認
-    const storedData = localStorage.getItem("searchList");
-
-    if (storedData) {
-        // localStorageにデータが存在する場合
-        let parsedData;
-        try {
-            parsedData = JSON.parse(storedData);
-            console.log("localStorageにあるデータ:", parsedData);
-        } catch (error) {
-            console.error('JSONパースエラー:', error);
-        }
-    } else {
-        // localStorageにデータが存在しない場合
-        console.log("localStorageにデータがありません");
     }
 
     // 検索結果にマーカーを生成
