@@ -48,3 +48,14 @@ class Restaurant(ItemBase):
     id: int
     class Config:
         orm_mode = True
+
+class ZukanRestaurantBase(BaseModel):
+    zukan_id: str
+    restaurant_id: str
+
+class ZukanRestaurantCreate(ItemBase):
+    pass
+class ZukanRestaurant(ItemBase):
+    id: int
+    class Config:
+        orm_mode = True

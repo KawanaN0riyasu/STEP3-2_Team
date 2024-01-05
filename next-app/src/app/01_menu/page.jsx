@@ -49,7 +49,7 @@ const Menu = () => {
                         <MenuButton title="MAP検索" onClick={() => handleButtonClick("MAP検索")} />
                     </Link>
                     <Link 
-                        href="/02_mapSearch"
+                        href="/05_zukanList"
                         passHref 
                         style={{
                             width: '48%',

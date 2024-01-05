@@ -1,14 +1,16 @@
 'use client'
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Image from 'next/image'
 import photoUPImage from '/public/photo_up.png';
 import { useRouter } from 'next/navigation';
 
 const registerZukan = (e) => {
-  const[zukan_name, setName] =useState("浅草あんみつ")
-  const[zukan_memo, setMemo] =useState("東京に友達が来た時、一緒に行くあんみつ屋さんまとめ図鑑。有名どころ&老舗多め。")
+  const[zukan_name, setName] =useState("")
+  const[zukan_memo, setMemo] =useState("")
   const router = useRouter();
   const [parsedData, setParsedData] = useState([]);
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString();
   // localStorageの利用可能性を確認
   const parsedDataFromLocalStorage = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("registerList")) : null;
 
@@ -52,6 +54,7 @@ const registerZukan = (e) => {
       }
 
       localStorage.removeItem("registerList");
+      router.push('/05_zukanList');
 
     }catch(err){
       console.error("エラー:", err);
@@ -59,25 +62,39 @@ const registerZukan = (e) => {
   };
 
   return (
-  <div className="grid">
-    <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={zukanSubmit}>
-      <div className="m-3 grid-item gap-4">
-        <p>作成日：</p>
+    <div className="mockup-phone">
+      <div className="camera"></div> 
+      <div className="display">
+        <div className="artboard artboard-demo phone-1" style={{ backgroundColor: 'white' }}>
+          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={zukanSubmit}>
+            <div className="m-3 grid-item gap-4">
+              <p>作成日：{formattedDate}</p>
+            </div>
+            <div className="m-3 grid-item gap-4">
+              <input  className="input input-bordered w-full max-w-xs" value={zukan_name} onChange={(e)=>setName(e.target.value)} type="text" name="zukan_name" placeholder="図鑑名を入力" required/>
+            </div>
+            <div className="m-3 grid-item gap-4 item-center">
+              <Image 
+                className="md:block" 
+                src={photoUPImage} 
+                alt="アップロード" 
+                loading="eager" 
+                priority
+                layout="responsive"
+                width={100}
+                height={100}
+              />
+            </div>
+            <div className="m-3 grid-item">
+              <input  className="textarea textarea-bordered textarea-lg w-full max-w-xs" value={zukan_memo} onChange={(e)=>setMemo(e.target.value)} type="text" name="zukan_memo" placeholder="メモを入力" required/>
+            </div>
+            <div className="m-3 grid-item">
+            <button className="btn btn-wide btn-warning" type="submit">登録する</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div className="m-3 grid-item gap-4">
-        <input  className="input input-bordered w-full max-w-xs" value={zukan_name} onChange={(e)=>setName(e.target.value)} type="text" name="zukan_name" placeholder="図鑑名を入力" required/>
-      </div>
-      <div className="m-3 grid-item gap-4 item-center">
-        <Image className="md:block" src={photoUPImage} alt="アップロード" loading="eager" priority />
-      </div>
-      <div className="m-3 grid-item">
-        <input  className="textarea textarea-bordered textarea-lg w-full max-w-xs" value={zukan_memo} onChange={(e)=>setMemo(e.target.value)} type="text" name="zukan_memo" placeholder="メモを入力" required/>
-      </div>
-      <div className="m-3 grid-item">
-      <button className="btn btn-wide btn-warning" type="submit">図鑑登録する</button>
-      </div>
-    </form>
-  </div>
+    </div>
   )
 }
 

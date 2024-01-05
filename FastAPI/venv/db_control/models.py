@@ -39,6 +39,9 @@ class Zukan(Base):
     image = Column(String, index=True)
     description = Column(String, index=True)
 
+    restaurantlists = relationship("ZukanRestaurant", back_populates="zukantitle")
+
+
 # Restaurantモデルの定義
 class Restaurant(Base):
     __tablename__ = "restaurants"
@@ -52,3 +55,17 @@ class Restaurant(Base):
     address = Column(String, index=True)
     rating = Column(types.Float, index=True)
     status = Column(String, index=True)
+
+    zukancode = relationship("ZukanRestaurant", back_populates="restaurantcode")
+
+
+# Zukanモデルの定義
+class ZukanRestaurant(Base):
+    __tablename__ = "zukan_restaurants"
+
+    id = Column(Integer, primary_key=True, index=True)
+    zukan_id = Column(String,  ForeignKey("zukans.id"))
+    restaurant_id = Column(String,  ForeignKey("restaurants.id"))
+
+    zukantitle = relationship("Zukan", back_populates="restaurantlists")
+    restaurantcode = relationship("Restaurant", back_populates="zukancode")

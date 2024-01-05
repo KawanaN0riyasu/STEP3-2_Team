@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from db_control import crud, models, schemas
 from database import SessionLocal, engine, get_db
 import logging
+from sqlalchemy import desc
 
 models.Base.metadata.create_all(bind=engine)
 logger = logging.getLogger(__name__)
@@ -85,6 +86,25 @@ async def receive_search_data(search_data: List[PlaceData]):
         raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
 
 # NEXT.jsからデータを受け取る
+@app.post("/zukans")
+async def create_zukan(ZukanDataJson: List[ZukanData], db: Session = Depends(get_db)):
+    try:
+        db_zukans = []
+        for zukan_data_item in ZukanDataJson:
+            db_zukan = models.Zukan(title=zukan_data_item.zukan_name, image=zukan_data_item.zukan_image, description=zukan_data_item.zukan_memo)
+            db.add(db_zukan)
+            db_zukans.append(db_zukan)
+        db.commit()
+        for db_zukan in db_zukans:
+            db.refresh(db_zukan)
+
+        return db_zukans 
+    
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+        raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
+
+# NEXT.jsからデータを受け取る
 @app.post("/restaurants")
 async def create_restaurant(RestaurantDataJson: List[PlaceData], db: Session = Depends(get_db)):
     try:
@@ -105,28 +125,25 @@ async def create_restaurant(RestaurantDataJson: List[PlaceData], db: Session = D
         db.commit()
         for db_restaurant in db_restaurants:
             db.refresh(db_restaurant)
-
-        return db_restaurants 
-    
-    except Exception as e:
-        logger.error(f"An error occurred: {e}")
-        raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
-
-# NEXT.jsからデータを受け取る
-@app.post("/zukans")
-async def create_zukan(ZukanDataJson: List[ZukanData], db: Session = Depends(get_db)):
-    try:
-        db_zukans = []
-        for zukan_data_item in ZukanDataJson:
-            db_zukan = models.Zukan(title=zukan_data_item.zukan_name, image=zukan_data_item.zukan_image, description=zukan_data_item.zukan_memo)
-            db.add(db_zukan)
-            db_zukans.append(db_zukan)
+        
+        # SQLiteのZukanテーブルから末尾データを取得
+        last_zukan = db.query(models.Zukan).order_by(desc(models.Zukan.id)).first()
+        last_restaurants = db.query(models.Restaurant).order_by(desc(models.Restaurant.id)).limit(len(RestaurantDataJson)).all()
+        db_zukan_restaurants = []
+        for last_restaurant in last_restaurants:
+            db_zukan_restaurant = models.ZukanRestaurant(
+                zukan_id = last_zukan.id,
+                restaurant_id = last_restaurant.id,
+            )
+            db.add(db_zukan_restaurant)
+            db_zukan_restaurants.append(db_zukan_restaurant)
         db.commit()
-        for db_zukan in db_zukans:
-            db.refresh(db_zukan)
+        for db_zukan_restaurant in db_zukan_restaurants:
+            db.refresh(db_zukan_restaurant)
 
-        return db_zukans 
+        return {"restaurants": db_restaurants, "zukan_restaurants": db_zukan_restaurants }
     
     except Exception as e:
+        db.rollback()  # トランザクションのロールバック
         logger.error(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
