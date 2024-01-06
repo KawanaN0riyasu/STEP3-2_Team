@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>もぐもぐ図鑑</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100vh;
+      background-color: #F5F4E9; /* 背景色 */
+      overflow: hidden;
+    }
+
+    #left-image1, #left-image2, #left-image3,
+    #right-image1, #right-image2, #right-image3 {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      position: relative;
+      animation: floatAnimation 5s infinite alternate; /* 5秒かけて往復するアニメーション */
+    }
+
+    #left-image1 {
+      top: 10px;
+      animation-delay: 0.5s; /* 右の画像より遅らせてアニメーション開始 */
+    }
+
+    #left-image2 {
+      top: -200px;
+      animation-delay: 1.5s; /* 1.5秒後にアニメーション開始 */
+    }
+
+    #left-image3 {
+      top: 180px;
+      animation-delay: 2.5s; /* 2.5秒後にアニメーション開始 */
+    }
+
+    #right-image1 {
+      bottom: 170px;
+      animation-delay: 0.5s; /* 右の画像より遅らせてアニメーション開始 */
+    }
+
+    #right-image2 {
+      bottom: 50px;
+      animation-delay: 1.5s; /* 1.5秒後にアニメーション開始 */
+    }
+
+    #right-image3 {
+      bottom: 30px;
+      animation: none; /* アニメーション無効化 */
+      position: fixed; /* 右端に固定する */
+      right:120px
+    }
+
+    #frame-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #frame {
+      width: 350px;
+      height: 603px;
+    }
+
+    @keyframes floatAnimation {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px); /* 上に10px浮かせる */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="left-image1">
+    <img src="next-app\public\images/gohan1.png" alt="Left Image 1">
+  </div>
+  <div id="left-image2">
+    <img src="next-app\public\images/gohan2.png" alt="Left Image 2">
+  </div>
+  <div id="left-image3">
+    <img src="next-app\public\images/gohan3.png" alt="Left Image 3">
+  </div>
+
+  <div id="frame-container">
+    <iframe id="frame" src="http://localhost:3000/01_menu" frameborder="0"></iframe>
+  </div>
+
+  <div id="right-image1">
+    <img src="next-app\public\images/gohan4.png" alt="Right Image 1">
+  </div>
+  <div id="right-image2">
+    <img src="next-app\public\images/gohan5.png" alt="Right Image 2">
+  </div>
+  <div id="right-image3">
+    <img src="next-app\public\images/gohan6.png" alt="Right Image 3">
+  </div>
+</body>
+</html>
