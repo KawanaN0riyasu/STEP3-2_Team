@@ -5,11 +5,11 @@ from PIL import Image
 from io import BytesIO
 from typing import List, Optional
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
 from db_control import crud, models, schemas
 from database import SessionLocal, engine, get_db
 import logging
 from sqlalchemy import desc
+from sqlalchemy.orm import Session, joinedload
 
 models.Base.metadata.create_all(bind=engine)
 logger = logging.getLogger(__name__)
@@ -34,6 +34,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost:3000/map_suzu_kawana",
     "http://localhost:3000/04_createZukanTitle",
+    "http://localhost:3000/05_zukanList",
     "*",
 ]
 
@@ -147,3 +148,9 @@ async def create_restaurant(RestaurantDataJson: List[PlaceData], db: Session = D
         db.rollback()  # トランザクションのロールバック
         logger.error(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail=f"Error processing data: {e}")
+
+
+@app.get("/get_zukans", response_model=list[schemas.Zukan])
+async def read_zukans(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    zukans = crud.get_zukans(db, skip=skip, limit=limit)
+    return zukans

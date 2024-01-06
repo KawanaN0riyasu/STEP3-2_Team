@@ -1,15 +1,20 @@
-/*myzukan_kuwa*/
-/*import */
-import Link from 'next/link'
-import Image from 'next/image'
+'use client'
+import { useState, useEffect } from 'react';
+import ZukanCard from '../../components/zukanCard';
+import Link from 'next/link';
+import Image from 'next/image';
 
-/*メタデータ */
-export const metadata = {
-    title: 'MY図鑑'
-}
+const Home = () => {
+    const [zukans, setZukans] = useState([]);
 
-/*ここから*/
-export default function Page(){
+    useEffect(() => {
+        // FastAPIのエンドポイントにリクエストを送信してデータを取得する
+        fetch('http://localhost:8000/get_zukans')
+            .then(response => response.json())
+            .then(data => setZukans(data))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
     return(
         <>
         <div className="flex justify-center items-center">
@@ -61,150 +66,17 @@ export default function Page(){
                         <option>友達登録が多い順</option>
                     </select>
                 </div>
-
-                {/*図鑑 1段目*/}
-                <div className="card_container1 flex">
-
-                    {/*図鑑 1段目左*/}
-                    <div className="card w-48 bg-base-100 shadow-xl m-1">
-                        <figure className="px-3 pt-3">
-                            <Image src="/images/tokyo_asakusa.jpg" width={300} height={200} alt="tokyo_asakusa"/>
-                        </figure>
-                        <div className="card-body items-center text-center">
-                        
-                            <h2 className="card-title text-md">浅草あんみつ図鑑</h2>
-
-                            <div className="number flex items-center">
-                                <div className="completed text-lg">10</div>
-                                <div className="notcompleted text-sm ml-1">/25軒</div>
-                            </div>
-
-                            <div className="card-actions">
-                                <Link href ="anmitsuzukan_kuwa/">
-                                    <button className="btn btn-base-100">図鑑を見る</button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/*図鑑 1段目右*/}
-                    <div className="card w-48 bg-base-100 shadow-xl m-1">
-                        <figure className="px-3 pt-3">
-                            <Image src="/images/ramen.webp" width={300} height={200} alt="ramen"/>
-                        </figure>
-                        <div className="card-body items-center text-center">
-                            <h2 className="card-title text-md">池袋ラーメン図鑑</h2>
-
-                            <div className="number flex items-center">
-                                <div className="completed text-lg">10</div>
-                                <div className="notcompleted text-sm ml-1">/25軒</div>
-                            </div>
-
-                            <div className="card-actions">
-                                <Link href ="anmitsuzukan_kuwa/">
-                                    <button className="btn btn-base-200">図鑑を見る</button>
-                                </Link>
-                            </div>
-                        </div>
+                <div>
+                    <div className="grid grid-cols-2 gap-4">
+                        {zukans.map(zukan => (
+                            <ZukanCard key={zukan.id} zukan={zukan} />
+                        ))}
                     </div>
                 </div>
-
-                {/*図鑑 2段目*/}
-                <div className="card_container2 flex">
-
-                    {/*図鑑 2段目左*/}
-                    <div className="card w-48 bg-base-100 shadow-xl m-2">
-                        <figure className="px-3 pt-3">
-                            <Image src="/images/sinzyuku_okonomi.jpeg" width={300} height={200} alt="sinzyuku_okonomi"/>
-                        </figure>
-                        <div className="card-body items-center text-center">
-                            <h2 className="card-title text-md">新宿お好み焼き図鑑</h2>
-
-                            <div className="number flex items-center">
-                                <div className="completed text-lg">10</div>
-                                <div className="notcompleted text-sm ml-1">/25軒</div>
-                            </div>
-
-                            <div className="card-actions">
-                                <Link href ="anmitsuzukan_kuwa/">
-                                    <button className="btn btn-base-200">図鑑を見る</button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/*図鑑 2段目右*/}
-                    <div className="card w-48 bg-base-100 shadow-xl m-2">
-                        <figure className="px-3 pt-3">
-                            <Image src="/images/umeda_bread.jpeg" width={300} height={200} alt="umeda_bread"/>
-                        </figure>
-                        <div className="card-body items-center text-center">
-                            <h2 className="card-title text-md">梅田パン屋図鑑</h2>
-
-                            <div className="number flex items-center">
-                                <div className="completed text-lg">10</div>
-                                <div className="notcompleted text-sm ml-1">/25軒</div>
-                            </div>
-
-                            <div className="card-actions">
-                                <Link href ="anmitsuzukan_kuwa/">
-                                    <button className="btn btn-base-200">図鑑を見る</button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/*図鑑 ３段目*/}
-                <div className="card_container3 flex">
-
-                    {/*図鑑 ３段目左*/}
-                    <div className="card w-48 bg-base-100 shadow-xl m-1">
-                        <figure className="px-3 pt-3">
-                            <Image src="/images/tokyo_asakusa.jpg" width={300} height={200} alt="tokyo_asakusa"/>
-                        </figure>
-                        <div className="card-body items-center text-center">
-                            <h2 className="card-title text-md">浅草あんみつ図鑑</h2>
-
-                            <div className="number flex items-center">
-                                <div className="completed text-lg">10</div>
-                                <div className="notcompleted text-sm ml-1">/25軒</div>
-                            </div>
-
-                            <div className="card-actions">
-                                <Link href ="anmitsuzukan_kuwa/">
-                                    <button className="btn btn-base-100">図鑑を見る</button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/*図鑑 3段目右*/}
-                    <div className="card w-48 bg-base-100 shadow-xl m-1">
-                        <figure className="px-3 pt-3">
-                            <Image src="/images/ramen.webp" width={300} height={200} alt="ramen"/>
-                        </figure>
-                        <div className="card-body items-center text-center">
-                            <h2 className="card-title text-md">池袋ラーメン図鑑</h2>
-
-                            <div className="number flex items-center">
-                                <div className="completed text-lg">10</div>
-                                <div className="notcompleted text-sm ml-1">/25軒</div>
-                            </div>
-
-                            <div className="card-actions">
-                                <Link href ="anmitsuzukan_kuwa/">
-                                    <button className="btn btn-base-200">図鑑を見る</button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>       
-
-
             </div>
         </div>
         </>
-    )
-}
+    );
+};
+
+export default Home;
