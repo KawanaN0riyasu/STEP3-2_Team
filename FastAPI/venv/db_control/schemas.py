@@ -26,9 +26,9 @@ class ZukanBase(BaseModel):
     title: str
     image: str | None = None
     description: str | None = None
-class ZukanCreate(ItemBase):
+class ZukanCreate(ZukanBase):
     pass
-class Zukan(ItemBase):
+class Zukan(ZukanBase):
     id: int
     class Config:
         orm_mode = True
@@ -42,20 +42,21 @@ class RestaurantBase(BaseModel):
     address: str
     rating: float
     status: str 
-class RestaurantCreate(ItemBase):
+class RestaurantCreate(RestaurantBase):
     pass
-class Restaurant(ItemBase):
+class Restaurant(RestaurantBase):
     id: int
     class Config:
         orm_mode = True
 
 class ZukanRestaurantBase(BaseModel):
-    zukan_id: str
-    restaurant_id: str
+    zukan_id: int
+    restaurant_id: int
+    visit_achievements: int
 
-class ZukanRestaurantCreate(ItemBase):
+class ZukanRestaurantCreate(ZukanRestaurantBase):
     pass
-class ZukanRestaurant(ItemBase):
+class ZukanRestaurant(ZukanRestaurantBase):
     id: int
     class Config:
         orm_mode = True

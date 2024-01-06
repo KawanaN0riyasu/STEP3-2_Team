@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 const Home = () => {
     const [zukans, setZukans] = useState([]);
+    const [Zukan_restaurants, setZukan_restaurants] = useState([]);
 
     useEffect(() => {
         // FastAPIのエンドポイントにリクエストを送信してデータを取得する
@@ -13,6 +14,13 @@ const Home = () => {
             .then(response => response.json())
             .then(data => setZukans(data))
             .catch(error => console.error('Error fetching data:', error));
+
+        // FastAPIのエンドポイントにリクエストを送信してデータを取得する
+        fetch('http://localhost:8000/get_zukan_restaurants')
+            .then(response => response.json())
+            .then(data => setZukan_restaurants(data))
+            .catch(error => console.error('Error fetching data:', error));
+
     }, []);
 
     return(

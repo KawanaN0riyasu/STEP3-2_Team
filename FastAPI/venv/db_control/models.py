@@ -64,8 +64,9 @@ class ZukanRestaurant(Base):
     __tablename__ = "zukan_restaurants"
 
     id = Column(Integer, primary_key=True, index=True)
-    zukan_id = Column(String,  ForeignKey("zukans.id"))
-    restaurant_id = Column(String,  ForeignKey("restaurants.id"))
+    zukan_id = Column(Integer,  ForeignKey("zukans.id"))
+    restaurant_id = Column(Integer,  ForeignKey("restaurants.id"))
+    visit_achievements = Column(Integer, index=True)
 
     zukantitle = relationship("Zukan", back_populates="restaurantlists")
     restaurantcode = relationship("Restaurant", back_populates="zukancode")

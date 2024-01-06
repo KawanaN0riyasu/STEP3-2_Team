@@ -30,3 +30,6 @@ def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
 
 def get_zukans(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Zukan).offset(skip).limit(limit).all()
+
+def get_zukan_restaurants(db: Session, skip: int = 0, limit: int = 200):
+    return db.query(models.ZukanRestaurant).offset(skip).limit(limit).all()
