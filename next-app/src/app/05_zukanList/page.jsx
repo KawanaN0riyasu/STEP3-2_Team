@@ -30,7 +30,14 @@ const Home = () => {
                         <div className="btn btn-ghost btn-circle avatar m-1">
                             <div className="w-10 rounded-full ">
                                 {/*user_photo呼び出す？ */}
-                                <Image src="/images/character_girl_normal.png" width={100} height={100} alt="user_photo" />
+                                <Image 
+                                    src="/images/character_girl_normal.png" 
+                                    width={100} 
+                                    height={100} 
+                                    alt="user_photo"
+                                    priority
+                                    loading="eager"
+                                />
                             </div>
                         </div>  
 
@@ -41,7 +48,7 @@ const Home = () => {
                         <Image src="/images/medal_icon.png" width={30} height={30} alt="medal_icon" />
                         <Image src="/images/medal_icon.png" width={30} height={30} alt="medal_icon" />
                     
-                        <Link href ="tomodachizukan_kuwa/">
+                        <Link href ="06_restaurantList/">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle m-1">
                                 <div className="indicator">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -60,7 +67,10 @@ const Home = () => {
 
                 {/*ソート */}
                 <div className="flex">
-                    <select className="select select-bordered max-w-x ml-auto text-xs w-30 h-6 m-2"defaultValue="更新日が新しい順">
+                    <select 
+                        className="select select-bordered max-w-x ml-auto text-xs w-30 h-6 m-2" 
+                        defaultValue="更新日が新しい順"
+                    >
                         <option disabled>更新日が新しい順</option>
                         <option>登録数が多い順</option>
                         <option>友達登録が多い順</option>

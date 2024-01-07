@@ -156,7 +156,12 @@ async def read_zukans(skip: int = 0, limit: int = 100, db: Session = Depends(get
     zukans = crud.get_zukans(db, skip=skip, limit=limit)
     return zukans
 
+@app.get("/get_restaurants", response_model=list[schemas.Restaurant])
+async def read_restaurants(skip: int = 0, limit: int = 200, db: Session = Depends(get_db)):
+    restaurants = crud.get_restaurants(db, skip=skip, limit=limit)
+    return restaurants
+
 @app.get("/get_zukan_restaurants", response_model=list[schemas.ZukanRestaurant])
-async def read_zukan_restaurants(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+async def read_zukan_restaurants(skip: int = 0, limit: int = 200, db: Session = Depends(get_db)):
     zukan_restaurants = crud.get_zukan_restaurants(db, skip=skip, limit=limit)
     return zukan_restaurants
