@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Cards from './06_card';
 
 const API_ENDPOINT = 'http://localhost:8000/get_zukan_restaurants';
 
-const buttonStyle = {
-    width: '83px',
-    fontSize: '11px',
+const buttonStyles = {
+    行った: { width: '83px', fontSize: '11px', backgroundColor: '#FCAA00', color: 'white' },
+    これから: { width: '83px', fontSize: '11px', backgroundColor: 'white', color: '#767676'},
+    達成率: { width: '83px', fontSize: '11px', backgroundColor: '#767676', color: 'white' },
+    フォロワー: { width: '83px', fontSize: '11px', backgroundColor: '#61C359', color: 'white' },
 };
 
 const ActivitiesResults = ({ parsedDataFromLocalStorage }) => {
@@ -23,13 +25,14 @@ const ActivitiesResults = ({ parsedDataFromLocalStorage }) => {
     };
 
     // zukan.id と一致する zukanRestaurants を抽出する関数
-    const RestaurantsIdList = () => {
-        return zukan_restaurants.filter((zukan_restaurant) => zukan_restaurant.zukan_id === parsedDataFromLocalStorage.id).map((restaurant) => restaurant.restaurant_id);
-    };
+    const RestaurantsList = useMemo(() => {
+        return zukan_restaurants.filter(zukan_restaurant => zukan_restaurant.zukan_id === parsedDataFromLocalStorage.id);
+    }, [zukan_restaurants, parsedDataFromLocalStorage.id]);
 
-    const countMatchingRestaurants = () => {
-        return zukan_restaurants.filter(( zukan_restaurant) =>  zukan_restaurant.zukan_id === parsedDataFromLocalStorage.id).length;
-    };
+    const countMatchingRestaurants = useMemo(() => RestaurantsList.length, [RestaurantsList]);
+    
+
+    //const countMatchingRestaurants = RestaurantsIdList().length
     
     const countNotZeroVisitAchievements = () => {
         return zukan_restaurants.filter(( zukan_restaurant) =>  zukan_restaurant.zukan_id === parsedDataFromLocalStorage.id &&  zukan_restaurant.visit_achievements !== 0).length;
@@ -39,8 +42,8 @@ const ActivitiesResults = ({ parsedDataFromLocalStorage }) => {
         return zukan_restaurants.filter(( zukan_restaurant) =>  zukan_restaurant.zukan_id === parsedDataFromLocalStorage.id &&  zukan_restaurant.visit_achievements === 0).length;
     };
 
-    const visitAchievementsRate = countMatchingRestaurants() !== 0
-    ? `${(countNotZeroVisitAchievements() / countMatchingRestaurants() * 100).toFixed(0)}%`
+    const visitAchievementsRate = countMatchingRestaurants !== 0
+    ? `${(countNotZeroVisitAchievements() / countMatchingRestaurants * 100).toFixed(0)}%`
     : 'N/A';
     
     return (
@@ -53,7 +56,7 @@ const ActivitiesResults = ({ parsedDataFromLocalStorage }) => {
                     { label: 'フォロワー', count: '04人' },
                 ].map((item, index) => (
                     <div key={index} className="flex-none flex-grow flex flex-col items-center">
-                        <button className="btn btn-sm btn-outline mb-1" style={buttonStyle}>
+                        <button className="btn btn-sm mb-1" style={buttonStyles[item.label]}>
                             {item.label}
                         </button>
                         <p className="text-xl font-bold">{item.count}</p>
@@ -61,18 +64,7 @@ const ActivitiesResults = ({ parsedDataFromLocalStorage }) => {
                 ))}
             </div>
 
-            {/*ソート */}
-            <div className="flex">
-            <select 
-                className="select select-bordered max-w-x ml-auto text-xs w-30 h-6 m-2"
-                defaultValue="updateDesc"
-            >
-                <option value="updateDesc">更新日が新しい順</option>
-                <option value="registerNum">登録数が多い順</option>
-                <option value="friendNum">友達登録が多い順</option>
-            </select>
-            </div>
-            <Cards restaurantIds={RestaurantsIdList()} />
+            <Cards restaurantsIDList={RestaurantsList} />
         </>
     );
 };

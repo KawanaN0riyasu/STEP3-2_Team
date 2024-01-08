@@ -1,12 +1,14 @@
 'use client'
+
 import ActivitiesResults from '../../components/06_resultsOfActivities';
 import Image from 'next/image';
 
-const parsedDataFromLocalStorage = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("selectedZukan")) : null;
 const defaultImage = '/photo_up.png';
 
 /*ここから*/
 export default function Page(){
+    const parsedDataFromLocalStorage = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("selectedZukan")) : null;
+
     return(
         <>
         {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
@@ -19,19 +21,23 @@ export default function Page(){
                 : 'データがありません'}
         </h1>
         <div className="flex items-center mt-2 mb-2">
-            <p className="text-xs">
-                {parsedDataFromLocalStorage && parsedDataFromLocalStorage.description
-                    ? parsedDataFromLocalStorage.description
-                    : ''}
+            <p className="text-xs flex-grow">
+            {parsedDataFromLocalStorage && parsedDataFromLocalStorage.description && (
+                <>
+                    <span>&lt;memo&gt;</span>
+                    <br />
+                    {parsedDataFromLocalStorage.description}
+                </>
+            )}
             </p>
-            <figure>
+            <figure className="flex-shrink-0">
                 <Image 
                     src={parsedDataFromLocalStorage && parsedDataFromLocalStorage.image
                         ? parsedDataFromLocalStorage.image
                         : defaultImage
                     } 
-                    width={200} 
-                    height={100} 
+                    width={120} 
+                    height={60}
                     alt="tokyo_asakusa" 
                     priority
                 />

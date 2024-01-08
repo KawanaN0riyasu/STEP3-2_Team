@@ -6,6 +6,7 @@ const ZukanCard = ({ zukan }) => {
     const defaultImage = '/photo_up.png';
     const handleButtonClick = () => {
         // ボタンがクリックされたときの処理
+        localStorage.removeItem("selectedZukan");
         // ここでzukanをlocalStorageに保存する
         localStorage.setItem('selectedZukan', JSON.stringify(zukan));
     };
