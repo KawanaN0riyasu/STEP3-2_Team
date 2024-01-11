@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const API_ENDPOINT = 'http://localhost:8000/get_restaurants';
 
@@ -8,10 +9,16 @@ const Cards = ({ restaurantsIDList }) => {
     const [restaurants, setRestaurants] = useState([]);
     const [visitedRestaurants, setVisitedRestaurants] = useState([]);
     const [sortOrder, setSortOrder] = useState('updateDesc'); 
+    const router = useRouter();
     const filterdList = (restaurantsIDList) => {
         return restaurantsIDList
             .filter(item => item.visit_achievements !== 0)
             .map(item => item.restaurant_id);
+    };
+
+    const handleMapButtonClick = () => {
+        // '/map' は実際の移動先のパスに置き換えてください
+        router.push('07_restraurantMap');
     };
 
     useEffect(() => {
@@ -27,6 +34,13 @@ const Cards = ({ restaurantsIDList }) => {
 
         fetchData();
     }, []);
+
+    // RestaurantsListの結果をlocalStorageに保存
+    useEffect(() => {
+        const filteredRestaurants = RestaurantsList();
+        localStorage.removeItem("filteredRestaurants");
+        localStorage.setItem('filteredRestaurants', JSON.stringify(filteredRestaurants));
+    }, [restaurants, restaurantIds]);
 
     useEffect(() => {
         const filteredList = filterdList(restaurantsIDList);
@@ -72,9 +86,6 @@ const Cards = ({ restaurantsIDList }) => {
         setRestaurants(sortedRestaurants);
     }, [sortOrder, visitedRestaurants]);
 
-
-
-
     const RestaurantsList = () => {
         // 1〜16の店舗IDに基づいてフィルタリング
         return restaurants.filter(restaurant => restaurantIds.includes(restaurant.id));
@@ -83,9 +94,9 @@ const Cards = ({ restaurantsIDList }) => {
     return (
         <>
             {/*ソート */}
-            <div className="flex">
+            <div className="flex items-center justify-between">
                 <select 
-                    className="select select-bordered max-w-x ml-auto text-xs w-30 h-6 m-2"
+                    className="select select-bordered max-w-x text-xs w-30 h-6 m-2"
                     value={sortOrder}
                     onChange={(e) => setSortOrder(e.target.value)}
                 >
@@ -94,6 +105,14 @@ const Cards = ({ restaurantsIDList }) => {
                     <option value="nonvisit">これから優先</option>
                     <option value="UserRating">ユーザー評価高い順</option>
                 </select>
+
+                <button 
+                    className="btn btn-sm mb-1" 
+                    style={{ width: '83px', fontSize: '13px', backgroundColor: '#61C359', color: 'white', marginRight:'10px' }}
+                    onClick={handleMapButtonClick}
+                >
+                    MAP画面
+                </button>
             </div>
             {/* restaurantsをマップしてCardを生成 */}
             {RestaurantsList().map((restaurant, index) => (

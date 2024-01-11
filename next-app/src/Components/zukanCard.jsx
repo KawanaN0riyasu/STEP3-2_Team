@@ -15,7 +15,14 @@ const ZukanCard = ({ zukan }) => {
         <div className="card w-48 bg-base-100 shadow-xl m-1">
             <figure className="px-3 pt-3">
                 {/* ここで `zukan.image` を使用して画像のURLを指定 */}
-                <Image src={zukan.image || defaultImage} width={300} height={200} alt={zukan.title} priority />
+                <Image 
+                    src={zukan.image || defaultImage} 
+                    width={300} 
+                    height={200} 
+                    alt={zukan.title} 
+                    priority 
+                    style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                />
             </figure>
             <div className="card-body items-center text-center">
                 <h2 className="card-title text-md">{zukan.title}</h2>
