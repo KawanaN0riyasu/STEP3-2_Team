@@ -2,12 +2,15 @@
 import React, {useState, useEffect}  from 'react';
 import { useRouter } from 'next/navigation';
 import ReactDOM from 'react-dom'
+import Mockupphone from '../../components/mockupphone'; //デモ用スマホ画面追加
+
 
 const Card = () => {
   const [parsedData, setParsedData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
   const [isConfirmationVisible, setConfirmationVisible] = useState(false);
   const router = useRouter();
+
 
   // ローカルストレージからデータを取得する関数
   useEffect(() => {
@@ -103,6 +106,7 @@ const Card = () => {
   );
 
   return (
+    <Mockupphone> {/*デモ用スマホ画面*/}
     <div>
       <div style={{ fontSize: '24px' }}>図鑑に登録したいお店に✅を入れてください。</div>
       {parsedData.map((item, index) => (
@@ -151,6 +155,7 @@ const Card = () => {
       </div>
       {ReactDOM.createPortal(confirmationPopup, document.body)}
     </div>
+    </Mockupphone>
   );
 };
 
