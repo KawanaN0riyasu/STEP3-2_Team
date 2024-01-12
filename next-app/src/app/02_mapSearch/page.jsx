@@ -259,11 +259,11 @@ export default function SearchMap(){
                         </GoogleMap>
                         {/* 図鑑作成ボタン */}
                         {showCreateBookButton && (
-                            <div style={{ position: 'absolute', bottom: '30px', right: '20px', zIndex: '100' }}>
+                            <div style={{ position: 'absolute', bottom: '100px', right: '10px', zIndex: '100' }}>
                                 <button
                                     type="button"
                                     onClick={handleCreateBookClick}
-                                    style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' }}
+                                    style={{ background: '#23CB57', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' }}
                                 >
                                     リストを見る
                                 </button>
