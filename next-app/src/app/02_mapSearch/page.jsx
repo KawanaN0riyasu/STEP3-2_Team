@@ -4,6 +4,8 @@ import React, { useCallback, useRef, useState, useEffect} from 'react';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import sendSearchDataToServer from '../../components/toFastAPI';
 import { useRouter } from 'next/navigation';
+import BottomAppBar from '../../components/BottomAppBar'; //下部メニューバー追加
+import Mockupphone from '../../components/mockupphone'; //デモ用スマホ画面追加
 
 //関数・変数定義
 let Map;
@@ -220,10 +222,11 @@ export default function SearchMap(){
     }
 
     return (
-        <div className="mockup-phone">
-            <div className="camera"></div> 
-            <div className="display">
-                <div className="artboard artboard-demo phone-1">
+        <>
+        <Mockupphone> {/*デモ用スマホ画面*/}
+                <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+                    <BottomAppBar />{/*下部メニューバー*/}
+                </div>
                     <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '100' }}>
                         <div style={{ margin: 'auto', marginTop: '50px', display: 'flex', alignItems: 'center', background: 'white', width: '80%', height: '50px', borderRadius: '5px', padding: '10px 10px', border: '1px solid #ccc' }}>
                             <input
@@ -267,8 +270,7 @@ export default function SearchMap(){
                             </div>
                         )}
                     </div>
-                </div>
-            </div>
-        </div>
+            </Mockupphone>
+    </>
     );
 };
