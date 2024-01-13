@@ -1,7 +1,8 @@
-/*アプリTOPテスト*/
+/*アプリTOP*/
 /*import */
 import Link from 'next/link'
 import Image from 'next/image'
+import Mockupphone from '../../components/mockupphone';//デモ用スマホ画面追加
 
 /*メタデータ */
 export const metadata = {
@@ -12,24 +13,18 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <div className="mockup-phone">
-        <div className="camera"></div> 
-        <div className="display">
-          <div className="artboard artboard-demo phone-1">
-            <div style={{ backgroundColor: "#FCAA00", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-              {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
-              <div className="sm-phone-4">
-                <Image src="/images/top.png" width={432} height={315} alt="top" />
-                <Link href="01_menu/">
-                  <div className="flex items-center justify-center">
-                    <button className="btn btn-ghost font-bold text-lg">START</button>
-                  </div>
-                </Link>
+      <Mockupphone>{/*デモ用スマホ画面追加*/}
+        <div style={{ backgroundColor: "#FCAA00", height: "569px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div className="sm-phone-4">
+            <Image src="/images/top.png" width={432} height={315} alt="top" />
+            <Link href="02_mapSearch/">
+              <div className="flex items-center justify-center">
+                <button className="btn btn-ghost font-bold text-lg">START</button>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
-      </div>
+      </Mockupphone>
     </>
-  )
+  );
 }
