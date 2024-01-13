@@ -129,16 +129,11 @@ const Card = () => {
                   }}
                 />
               </label>
-            </div>  
-            
-            
-            
-            
+            </div>
             <h2 className="card-title"style={{ fontSize: '12px' }}>{item.name}</h2>
             <li style={{ fontSize: '10px' }}> 運用状況: {item.status}</li>
             <li style={{ fontSize: '10px' }}> 住所: {item.address}</li>
             <li style={{ fontSize: '10px' }}> ユーザー評価: {item.rating}</li>
-            
           </div>
         </div>
       ))}
