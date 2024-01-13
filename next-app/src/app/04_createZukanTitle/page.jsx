@@ -3,6 +3,8 @@ import React, {useState} from 'react';
 import Image from 'next/image'
 import photoUPImage from '/public/photo_up.png';
 import { useRouter } from 'next/navigation';
+import Mockupphone from '../../components/mockupphone'; //デモ用スマホ画面追加
+import BottomAppBar from '../../components/BottomAppBar'; //下部メニューバー追加
 
 const registerZukan = (e) => {
   const[zukan_name, setName] =useState("")
@@ -62,11 +64,11 @@ const registerZukan = (e) => {
   };
 
   return (
-    <div className="mockup-phone">
-      <div className="camera"></div> 
-      <div className="display">
-        <div className="artboard artboard-demo phone-1" style={{ backgroundColor: 'white' }}>
-          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={zukanSubmit}>
+    <Mockupphone> {/*デモ用スマホ画面*/}
+          <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+              <BottomAppBar />{/*下部メニューバー*/}
+          </div>
+          <form className="pt-8" onSubmit={zukanSubmit}>
             <div className="m-3 grid-item gap-4">
               <p>作成日：{formattedDate}</p>
             </div>
@@ -92,10 +94,9 @@ const registerZukan = (e) => {
             <button className="btn btn-wide btn-warning" type="submit">登録する</button>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
-  )
+
+    </Mockupphone>
+  );
 }
 
 export default registerZukan
