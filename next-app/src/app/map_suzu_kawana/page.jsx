@@ -1,11 +1,12 @@
 'use client'
 //機能インポート
-import React, { useCallback, useRef, useState} from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { useRouter } from 'next/navigation';
 
 //関数・変数定義
 let Map;
+const infoWindows = useRef([]);
 
 //MAPコンテナスタイル
 const containerStyle = {
@@ -27,50 +28,53 @@ const libraries = ["places"];
 export default function SearchMap(){
     const [markerPoint, setMarkerPoint] = useState(center);
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'APIキーを入力する',
+        googleMapsApiKey: '',
         libraries: libraries,
     });
-    const mapRef = useRef();
-    const infoWindows = useRef([]);
-    const onMapLoad = useCallback((map) => {mapRef.current = map;}, []);
+    const mapRef = useRef(null);
+    const [infoWindows, setInfoWindows] = useState([]);
     const router = useRouter();
+    const [hasMapDataLoaded, setMapDataLoaded] = useState(false);
+
+    useEffect(() => {
+        // これはisLoadedがtrueになったときに一度だけ呼び出されます
+        if (isLoaded && !hasMapDataLoaded){
+            getMapData();
+            setMapDataLoaded(true);
+        }
+    }, [isLoaded, hasMapDataLoaded]);
 
     //MAP読み込めない場合の表示
     if (loadError) return "Error";
     if (!isLoaded) return "Loading...";
 
-    useEffect(() => {
-        // これはisLoadedがtrueになったときに一度だけ呼び出されます
-        if (isLoaded) {
-            getMapData();
-        }
-    }, [isLoaded]);
-
     async function getMapData() {
         try {
             const geocoder = new google.maps.Geocoder();
-            let results;
-            const restaurantsFromLocalStorage = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("filteredRestaurants")) : null;
-            console.log("Restaurants from localStorage:", restaurantsFromLocalStorage);
+            const restaurantsFromLocalStorage = 
+                typeof window !== 'undefined' 
+                ? JSON.parse(localStorage.getItem("filteredRestaurants")) 
+                : null;
             
-            const places = (restaurantsFromLocalStorage && restaurantsFromLocalStorage.length > 0)
-                ? restaurantsFromLocalStorage.map((restaurant) => ({
-                    info: {
-                        name: restaurant.name || "Default Name",
-                        image: restaurant.image || null,
-                        address: restaurant.address || "Default Address",
-                        rating: restaurant.rating || "Default Rating",
-                    },
-                    location: {
-                        lat: restaurant.lat || 0,
-                        lng: restaurant.lng || 0,
-                    },
-                }))
-                : [];
-        
-            if (places.trim() === '') {
+            let places =
+                (restaurantsFromLocalStorage && restaurantsFromLocalStorage.length > 0)
+                    ? restaurantsFromLocalStorage.map((restaurant) => ({
+                        info: {
+                            name: restaurant.name || "Default Name",
+                            image: restaurant.image || null,
+                            address: restaurant.address || "Default Address",
+                            rating: restaurant.rating || "Default Rating",
+                        },
+                        location: {
+                            lat: restaurant.lat || 0,
+                            lng: restaurant.lng || 0,
+                        },
+                    }))
+                    : [];
+            
+            if (Array.isArray(places) && places.length === 0) {
                 // places が空の場合、東京駅の座標をセット
-                results = [
+                places = [
                     {
                         location: {
                             lat: 35.681298,
@@ -81,18 +85,21 @@ export default function SearchMap(){
             }    
 
             if (places.length > 0) {
-                const getLat = places[0].location.lat();
-                const getLng = places[0].location.lng();
+                const getLat = places[0].location.lat;
+                const getLng = places[0].location.lng;
                 const newCenter = {
                     lat: getLat,
                     lng: getLng,
                 };
                 setMarkerPoint(newCenter);
-                await getNearshop(getLat, getLng);  // awaitを追加してgetNearshopが完了するのを待つ
+            
+                // 地図が存在しない場合にのみ初期化
+                if (!Map) {
+                    await getNearshop(getLat, getLng); // awaitを追加してgetNearshopが完了するのを待つ
+                }
                 // getNearshopが完了した後にcallbackを呼び出す
                 callback(places);
             }
-
         } catch (error) {
             console.error('エラーが発生しました', error);
             alert('エラーが発生しました。詳細はコンソールを確認してください。');
@@ -101,21 +108,17 @@ export default function SearchMap(){
 
     function getNearshop(lat, lng) {
         try {
-            //地図が存在しない場合は処理を中断
-            if (!document.getElementById('map')) {
-                return;
+            // 地図が存在しない場合のみ初期化
+            if (!Map) {
+                const pyrmont = new google.maps.LatLng(lat, lng);
+                Map = new google.maps.Map(document.getElementById('map'), {
+                    center: pyrmont,
+                    zoom: 15,
+                    zoomControl: false,
+                    disableDefaultUI: true,
+                });
             }
-
-            // 検索対象の位置を LatLng オブジェクトとして作成
-            const pyrmont = new google.maps.LatLng(lat, lng);
-            // 地図を作成し、指定された位置を中心に表示
-            Map = new google.maps.Map(document.getElementById('map'), {
-                center: pyrmont,
-                zoom: 15,
-                zoomControl: false,
-                disableDefaultUI: true,
-            });
-            // getNearshopが完了したことを示すためにPromiseを返す（実際には不要かもしれません）
+            console.log('Map:', Map); 
             return Promise.resolve();
         } catch (error) {
             // エラーが発生した場合の処理
@@ -128,9 +131,19 @@ export default function SearchMap(){
 
     // 検索結果の処理
     function callback(places) {
+        const newInfoWindows = [];
         for (let i = 0; i < places.length; i++) {
-            createMarker(places[i]);
-        }        
+            const marker = createMarker(places[i]);
+            const infoWindow = createInfoWindow(places[i]);
+            newInfoWindows.push(infoWindow);
+
+            // マーカーがクリックされた時の処理
+            marker.addListener('click', () => {
+                closeAllInfoWindows();
+                infoWindow.open(mapRef.current, marker);
+            });
+        }     
+        setInfoWindows(newInfoWindows);
     }
 
     // 検索結果にマーカーを生成
@@ -141,19 +154,20 @@ export default function SearchMap(){
             map: Map,
             position: place.location,
             icon: {
-                url: place.info.image && place.info.image.length > 0 ? place.info.image[0].getUrl() : 'URLが見つかりません',
+                url: place.info.image && place.info.image.length > 0 ? place.info.image : 'URLが見つかりません',
                 scaledSize: new google.maps.Size(40, 40)
             },
             optimized: false,
         });
-        // インフォウィンドウ初期化
-        infoWindows[0] = new google.maps.InfoWindow();
+
+        // 新しい InfoWindow インスタンスを作成し、infoWindows 配列に格納
+        const infoWindow = new google.maps.InfoWindow();
 
         // 施設情報を表示するための情報リスト作成
         const infoList = [
             place.info.name,
             (place.info.image && place.info.image.length > 0) ?
-            `<p><img style="max-width:200px" src="${place.info.image.getUrl()}"/></p>` : null,
+            `<p><img style="max-width:200px" src="${place.info.image}"/></p>` : null,
             `住所：${place.info.address}`,
             `ユーザー評価：${place.info.rating}`,
         ];
@@ -161,12 +175,14 @@ export default function SearchMap(){
         // マーカーがクリックされた時のインフォウィンドウ表示
         const info = infoList.join('<br>');
         google.maps.event.addListener(marker, "click", () => {
-            if (infoWindows[1]) infoWindows[1].close();    //複数のマーカーがクリックされたとき前のウィンドウを閉じる
-            if (!infoWindows[0]) return;                   //ウィンドウが存在しない場合は何もせずに終了
-            infoWindows[0].close();                        //同じマーカーを再度クリックした場合、前に開いたウィンドウを閉じる
-            infoWindows[0].setContent(info);               //マーカーがクリックされたときに表示情報を更新
-            infoWindows[0].open(marker.getMap(), marker);  //クリックされたマーカーに関連する情報が表示
+            console.log("Marker clicked:", place); 
+            infoWindows.close();                        //同じマーカーを再度クリックした場合、前に開いたウィンドウを閉じる
+            infoWindows.setContent(info);               //マーカーがクリックされたときに表示情報を更新
+            infoWindows.open(marker.getMap(), marker);  //クリックされたマーカーに関連する情報が表示
         });
+
+        // infoWindows 配列に新しい InfoWindow インスタンスを格納
+        infoWindows.current.push(infoWindow);
     }
 
     // ボタンをクリックした時の処理

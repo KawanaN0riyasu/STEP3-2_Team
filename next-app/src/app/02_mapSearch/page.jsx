@@ -179,6 +179,7 @@ export default function SearchMap(){
     // 検索結果にマーカーを生成
     function createMarker(place) {
         if (!place.geometry || !place.geometry.location) return;
+        console.log('CreateMarker function called with places:', place.geometry.location);
         //マーカー作成
         const marker = new google.maps.Marker({
             map: Map,
