@@ -4,7 +4,7 @@ import Cards from './06_card';
 const API_ENDPOINT = 'http://localhost:8000/get_zukan_restaurants';
 
 const buttonStyles = {
-    行った: { width: '75px', fontSize: '10px', backgroundColor: '#FCAA00', color: 'white' },
+    行った: { width: '75px', fontSize: '10px', backgroundColor: '#FCAA00', color: 'white',height:'1rem' },
     これから: { width: '75px', fontSize: '10px', backgroundColor: 'white', color: '#767676'},
     達成率: { width: '75px', fontSize: '10px', backgroundColor: '#767676', color: 'white' },
     フォロワー: { width: '75px', fontSize: '9px', backgroundColor: '#61C359', color: 'white' },
@@ -48,7 +48,7 @@ const ActivitiesResults = ({ parsedDataFromLocalStorage }) => {
     
     return (
         <>
-            <div className="flex-none flex items-center bg-orange-100 pt-3 pb-3 rounded-md">
+            <div className="flex-none flex items-cente pt-3 pb-3 rounded-md" style={{backgroundColor:'#FAE7BB'}}>
                 {[
                     { label: '行った', count: countNotZeroVisitAchievements() },
                     { label: 'これから', count: countZeroVisitAchievements() },

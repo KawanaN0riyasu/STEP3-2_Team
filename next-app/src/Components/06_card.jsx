@@ -154,12 +154,12 @@ const Cards = ({ restaurantsIDList }) => {
                         ) : (
                             <button className="btn btn-xs btn-outline" style={{backgroundColor: 'white', color: '#767676'}}>これから</button>
                         )}
-                        <h2>{restaurant.name}</h2>
-                        <p style={{ fontSize: '12px' }}>{restaurant.address}</p>
-                        <p style={{ fontSize: '12px' }}>ユーザー評価：{restaurant.rating}</p>
+                        <h2 style={{borderBottom: '1px dotted #767676'}}>{restaurant.name}</h2>
+                        <li style={{ fontSize: '12px' }}>{restaurant.address}</li>
+                        <li style={{ fontSize: '12px' }}>ユーザー評価：{restaurant.rating}</li>
                         <div className="flex">
                             <button 
-                                className="btn btn-xs mt-auto"
+                                className="btn btn-xs mt-auto mr-1"
                                 onClick={handleMapButtonClick2}
                             >
                                 詳細
