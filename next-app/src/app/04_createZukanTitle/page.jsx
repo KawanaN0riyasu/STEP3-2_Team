@@ -90,8 +90,8 @@ const registerZukan = (e) => {
             <div className="m-3 grid-item">
               <input  className="textarea textarea-bordered textarea-lg w-full max-w-xs" value={zukan_memo} onChange={(e)=>setMemo(e.target.value)} type="text" name="zukan_memo" placeholder="メモを入力" required/>
             </div>
-            <div className="m-3 grid-item">
-            <button className="btn btn-wide btn-warning" type="submit">登録する</button>
+            <div className="m-3 grid-item" style={{ display: 'flex', justifyContent: 'center' }}>
+              <button className="btn btn-wide btn-warning" type="submit">登録する</button>
             </div>
           </form>
 

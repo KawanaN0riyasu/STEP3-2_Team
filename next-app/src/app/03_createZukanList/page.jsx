@@ -108,19 +108,19 @@ const Card = () => {
 
   return (
     <Mockupphone> {/*デモ用スマホ画面*/}
-    <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+    <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100', marginLeft: '7px' }}>
         <BottomAppBar />{/*下部メニューバー*/}
     </div>
-    <div>
-      <div style={{ padding:'30px', fontSize: '14px'}}>図鑑に登録したいお店に✅を入れてください。</div>
+    <div style={{ background:'white'}}>
+      <div style={{ padding:'30px', fontSize: '14px', marginTop:'15px'}}>図鑑に登録したいお店に✅を入れてください。</div>
       {parsedData.map((item, index) => (
-        <div key={index} className="card lg:card-side bg-base-100 shadow-xl" style={{ height: '250px', width: '90%', margin: '10px', display: 'flex' }}>
+        <div key={index} className="card lg:card-side bg-base-100 shadow-xl" style={{ height: '250px', width: '90%', marginBottom: '10px', marginLeft: '17px', display: 'flex' }}>
           <figure style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box' }}>
             <img src={item.image} alt={`Album ${index + 1} `} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </figure>
           <div className="card-body" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' ,padding:'10px'}}>
             
-          <div className="form-cntrol"　style={{ position: 'absolute', top: '10px', right: '10px', zIndex: '2' }}>
+          <div className="form-cntrol" style={{ position: 'absolute', top: '10px', right: '10px', zIndex: '2' }}>
               <label className="cursor-pointer label" style={{justifyContent:'right'}}>
                 <input
                   type="checkbox"
@@ -141,7 +141,7 @@ const Card = () => {
           </div>
         </div>
       ))}
-      <div style={{ width: '80%', fontSize: '12px', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+      <div style={{ width: '80%', fontSize: '12px', display: 'flex', justifyContent: 'space-between', marginTop: '10px', marginLeft:'30px' }}>
         <button
           type="button"
           onClick={handleReturnClick}

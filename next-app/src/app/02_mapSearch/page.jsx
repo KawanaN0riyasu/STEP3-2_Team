@@ -225,7 +225,7 @@ export default function SearchMap(){
         <Mockupphone> {/*デモ用スマホ画面*/}
                 <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}></div>
                     <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '100' }}>
-                        <div style={{ margin: 'auto', marginTop: '50px', display: 'flex', alignItems: 'center', background: 'white', width: '80%', height: '50px', borderRadius: '5px', padding: '10px 10px', border: '1px solid #ccc' }}>
+                        <div style={{ margin: 'auto', marginTop: '40px', display: 'flex', alignItems: 'center', background: 'white', width: '95%', height: '50px', borderRadius: '5px', padding: '10px 10px', border: '1px solid #ccc' }}>
                             <input
                                 id="standard-basic"
                                 label="今日何食べる？"
@@ -246,7 +246,7 @@ export default function SearchMap(){
                     <div style={{ height: "100%", width: "100%", position: 'relative' }}>
                         <GoogleMap
                             id="map"
-                            mapContainerStyle={{ width: '100%', height: '100%' }}
+                            mapContainerStyle={{ width: '100%', height: '88%' }}
                             zoom={14}
                             center={markerPoint}
                             options={{ disableDefaultUI: true, zoomControl: false}}
