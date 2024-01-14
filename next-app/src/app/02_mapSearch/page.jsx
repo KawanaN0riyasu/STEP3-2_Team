@@ -246,7 +246,7 @@ export default function SearchMap(){
                     <div style={{ height: "100%", width: "100%", position: 'relative' }}>
                         <GoogleMap
                             id="map"
-                            mapContainerStyle={{ width: '100%', height: '88%' }}
+                            mapContainerStyle={{ width: '100%', height: '88.6%' }}
                             zoom={14}
                             center={markerPoint}
                             options={{ disableDefaultUI: true, zoomControl: false}}
