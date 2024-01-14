@@ -1,12 +1,22 @@
 'use client'
-import Map from '../../components/07_map';
-import { useEffect, useState } from 'react';
+import Map, { MapContext } from '../../components/07_map';
+import { useEffect, useState, useRef } from 'react';
+import { useGoogleMaps } from '../../components/googleMapsScript'; 
+import Mockupphone from '../../components/mockupphone'; //デモ用スマホ画面追加
+import BottomAppBar from '../../components/BottomAppBar'; //下部メニューバー追加
 
 function Home({ initialPlaces }) {
+    const { isLoaded, loadError, isMounted } = useGoogleMaps();
     const [places, setPlaces] = useState(initialPlaces);
     const [loading, setLoading] = useState(true);
+    const mapRef = useRef(null);
 
     useEffect(() => {
+        if (!isLoaded) {
+            // Google Maps APIが読み込まれていない場合は何もしない
+            return;
+        }
+
         // localStorageからデータを取得
         const storedData = JSON.parse(localStorage.getItem('filteredRestaurants'));
         
@@ -30,26 +40,37 @@ function Home({ initialPlaces }) {
 
         // ローディング完了を示すためにloadingをfalseに設定
         setLoading(false);
-    }, []); // 第二引数が空の場合、マウント時のみ実行
+    }, [isLoaded, isMounted]); // 第二引数が空の場合、マウント時のみ実行
+
+    useEffect(() => {
+        // places が変更されたときに再度マップを初期化
+        if (isLoaded && places && places.length > 0) {
+            console.log('initMap function called');
+            // Mapコンポーネントを呼び出し、mapRefも渡す
+            const mapComponent = <Map places={places} mapRef={mapRef} />;
+            // この変数を任意の箇所で描画するか、またはstateに格納して使います
+            console.log('Map component:', mapComponent);
+        }
+    }, [isLoaded, places]);
+
+    if (loadError) {
+        return <div>Error loading Google Maps</div>;
+    }
 
     if (loading) {
         return <div>Loading...</div>; // データ取得中の場合はローディング表示
     }
 
     return (
-        <div className="mockup-phone">
-        <div className="camera"></div> 
-        <div className="display">
-          <div className="artboard artboard-demo phone-1">
-            <div style={{ backgroundColor: "#FCAA00", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-              {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
-              <div className="sm-phone-4">
-                <Map places={places} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <Mockupphone> {/*デモ用スマホ画面*/}
+            <MapContext.Provider value={isMounted}>
+                                {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
+                                <div className="sm-phone-4">
+                                    <Map places={places} />
+                                </div>
+            </MapContext.Provider>
+            <BottomAppBar />{/*下部メニューバー*/}
+        </Mockupphone>
     );
 }
 

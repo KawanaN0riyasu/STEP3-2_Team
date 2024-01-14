@@ -50,7 +50,7 @@ function BottomAppBar() {
     <React.Fragment>
       <CssBaseline />
       
-      <AppBar position='abolute' sx={{ backgroundColor: '#FAE7BB', top: 'auto', bottom: '0',width: '320px'}}>
+      <AppBar position='relative' sx={{ backgroundColor: '#FAE7BB', top: 'auto', bottom: '0',width: '320px'}}>
         <Toolbar>
         <Link href="/00_title">
           <StyledIconButton  color="inherit" aria-label="person">
