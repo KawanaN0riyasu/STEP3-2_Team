@@ -20,7 +20,7 @@ const Home = () => {
     return(
         <Mockupphone> {/*デモ用スマホ画面*/}
 
-        <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100', marginLeft:'6px' }}>
+        <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
             <BottomAppBar />{/*下部メニューバー*/}
         </div>
         

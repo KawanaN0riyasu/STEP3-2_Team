@@ -12,35 +12,48 @@ export default function Page() {
         <BottomAppBar />{/*下部メニューバー*/}
         </div>
 
+        {/*お店データ */}
         <div className="title" style={{margin:'50px 10px 10px 10px'}}>
-        <h1 style={{borderBottom: '1px dotted #767676'}}>あんみつの深緑堂</h1>
-        <p style={{fontSize:'10px'}}>〒131-0033 東京都墨田区向島５丁目２７−１７ 東屋マンション 102</p>
+          <h1 style={{borderBottom: '1px dotted #767676'}}>あんみつの深緑堂</h1>
+          <p style={{fontSize:'10px'}}>〒131-0033 東京都墨田区向島５丁目２７−１７ 東屋マンション 102</p>
+        </div>
+        
+        {/*料理データ */}
+        <div className="cardall" style={{margin:'10px'}}>
+        <div className="card lg:card-side bg-base-100 shadow-xl">     
+          <figure><img src='/images/anmitsu.jpeg' alt="Album" style={{width:'100%',height:'100%'}}/></figure>
+            <div className="card-body" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' ,padding:'10px'}}>
+              <h2 className="card-title" style={{ fontSize: '14px', borderBottom: '1px dotted #767676'}}>季節のあんみつ</h2>
+              <li style={{ fontSize: '10px'}}>★★★★★</li>
+              <li style={{ fontSize: '10px'}}>フルーツがたっぷりで美味しかった！ほうじ茶セットがお得で良かった。</li>
+              <li style={{ fontSize: '10px'}}>作成日：2023年12月1日</li>
+            <div className="flex-column">
+              <button className="btn btn-xs mt-1 mr-1">更新</button>
+              <button className="btn btn-xs mt-1 mr-1">削除</button>
+            </div> 
+          <div className="card-actions justify-end"></div>
+          </div>
+          </div>
         </div>
 
-        <div className="menu" style={{ display: 'flex'}}>
-          <Image src="/images/anmitsu.jpeg" width={100} height={315} alt="top" style={{margin:'10px'}}/>
-          <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column' }}>
-          <p>季節のあんみつ</p>
-          <p>★★★★★</p>
-          <p>作成日：2024年01月13日</p>
-          <div className="flex">
-            <button className="btn btn-xs mt-auto">更新</button>
-            <button className="btn btn-xs mt-auto">削除</button>
-          </div>
-          </div>
 
-          <Image src="/images/parfait.webp" width={100} height={315} alt="top" style={{margin:'10px'}}/>
-          <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column' }}>
-          <p>抹茶パフェ</p>
-          <p>★★★★☆</p>
-          <p>作成日：2024年01月12日</p>
-          <div className="flex">
-            <button className="btn btn-xs mt-auto">更新</button>
-            <button className="btn btn-xs mt-auto">削除</button>
+        <div className="cardall" style={{margin:'10px'}}>
+        <div className="card lg:card-side bg-base-100 shadow-xl">     
+          <figure><img src="/images/parfait.jpeg" alt="Album" style={{width:'100%',height:'100%'}}/></figure>
+            <div className="card-body" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' ,padding:'10px'}}>
+              <h2 className="card-title" style={{ fontSize: '14px', borderBottom: '1px dotted #767676'}}>抹茶パフェ</h2>
+              <li style={{ fontSize: '10px'}}>★★★★☆</li>
+              <li style={{ fontSize: '10px'}}>抹茶のアイスが濃厚で美味しい。量が多いので、お腹をすかしていくこと！</li>
+              <li style={{ fontSize: '10px'}}>作成日：2024年01月13日</li>
+            <div className="flex-column">
+              <button className="btn btn-xs mt-1 mr-1">更新</button>
+              <button className="btn btn-xs mt-1 mr-1">削除</button>
+            </div> 
+            <div className="card-actions justify-end"></div>
+            </div>
           </div>
-          </div>
-
-        </div>
+        </div> 
+        
         </Mockupphone>
       </>
     );

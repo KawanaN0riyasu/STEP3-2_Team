@@ -223,6 +223,9 @@ export default function SearchMap(){
     return (
         <>
         <Mockupphone> {/*デモ用スマホ画面*/}
+        <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+              <BottomAppBar />{/*下部メニューバー*/}
+          </div>
                 <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}></div>
                     <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '100' }}>
                         <div style={{ margin: 'auto', marginTop: '40px', display: 'flex', alignItems: 'center', background: 'white', width: '95%', height: '50px', borderRadius: '5px', padding: '10px 10px', border: '1px solid #ccc' }}>
@@ -266,7 +269,7 @@ export default function SearchMap(){
                                 </button>
                             </div>
                         )}
-                    <BottomAppBar />{/*下部メニューバー*/}
+                   
                     </div>
             </Mockupphone>
     </>
