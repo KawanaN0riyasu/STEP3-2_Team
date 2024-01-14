@@ -51,7 +51,7 @@ function BottomAppBar() {
       <CssBaseline />
       
 
-      <AppBar position='abolute' sx={{ backgroundColor: '#FAE7BB', top: 'auto', bottom: '0',width: '320px',paddingTop:'10px',paddingBottom:'10px'}}>
+      <AppBar position='absolute' sx={{ backgroundColor: '#FAE7BB', top: 'auto', bottom: '0',width: '320px',paddingTop:'10px',paddingBottom:'10px'}}>
 
         <Toolbar>
         <Link href="/00_title">

@@ -21,10 +21,10 @@ const ZukanCard = ({ zukan }) => {
                     height={200} 
                     alt={zukan.title} 
                     priority 
-                    style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                    style={{ objectFit: 'cover', width: '90%', height: '100%' }}
                 />
             </figure>
-            <div className="card-body items-center text-center" style={{padding:'10px'}}>
+            <div className="card-body items-center text-center" style={{padding:'8px'}}>
                 <h2 className="card-title text-md" style={{ fontSize: '14px', borderBottom: '1px dotted #767676'}}>{zukan.title}</h2>
 
                 {/* ここで適切なデータを使用してカードの進捗を表示 */}

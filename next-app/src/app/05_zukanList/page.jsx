@@ -20,7 +20,7 @@ const Home = () => {
     return(
         <Mockupphone> {/*デモ用スマホ画面*/}
 
-        <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+        <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100', marginLeft:'6px' }}>
             <BottomAppBar />{/*下部メニューバー*/}
         </div>
         
@@ -33,7 +33,7 @@ const Home = () => {
                         <div className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full ">  
                                 <Image 
-                                    src="/images/profile_image.png" 
+                                    src="/images/character_girl_normal.png" 
                                     width={120} 
                                     height={120} 
                                     alt="user_photo"
@@ -64,7 +64,7 @@ const Home = () => {
                 </div>
                 
                 <div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-1">
                         {zukans.map(zukan => (
                             <ZukanCard key={zukan.id} zukan={zukan} />
                         ))}

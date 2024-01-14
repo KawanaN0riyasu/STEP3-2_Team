@@ -21,6 +21,11 @@ const Cards = ({ restaurantsIDList }) => {
         router.push('07_restraurantMap');
     };
 
+    const handleMapButtonClick2 = () => {
+        // '/map' は実際の移動先のパスに置き換えてください
+        router.push('08_menuList');
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -153,7 +158,12 @@ const Cards = ({ restaurantsIDList }) => {
                         <p style={{ fontSize: '12px' }}>{restaurant.address}</p>
                         <p style={{ fontSize: '12px' }}>ユーザー評価：{restaurant.rating}</p>
                         <div className="flex">
-                            <button className="btn btn-xs mt-auto">詳細</button>
+                            <button 
+                                className="btn btn-xs mt-auto"
+                                onClick={handleMapButtonClick2}
+                            >
+                                詳細
+                            </button>
                             <button className="btn btn-xs mt-auto">削除</button>
                         </div>
                     </div>

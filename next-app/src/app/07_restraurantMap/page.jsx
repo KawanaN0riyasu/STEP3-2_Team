@@ -93,7 +93,9 @@ function Home({ initialPlaces }) {
                 >
                     リストに戻る
                 </button>
-                <BottomAppBar />{/*下部メニューバー*/}
+            </div>
+            <div>
+                <BottomAppBar/>{/*下部メニューバー*/}
             </div>
         </Mockupphone>
     );

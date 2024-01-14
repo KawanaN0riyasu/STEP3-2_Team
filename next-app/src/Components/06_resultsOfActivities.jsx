@@ -4,10 +4,10 @@ import Cards from './06_card';
 const API_ENDPOINT = 'http://localhost:8000/get_zukan_restaurants';
 
 const buttonStyles = {
-    行った: { width: '83px', fontSize: '11px', backgroundColor: '#FCAA00', color: 'white' },
-    これから: { width: '83px', fontSize: '11px', backgroundColor: 'white', color: '#767676'},
-    達成率: { width: '83px', fontSize: '11px', backgroundColor: '#767676', color: 'white' },
-    フォロワー: { width: '83px', fontSize: '11px', backgroundColor: '#61C359', color: 'white' },
+    行った: { width: '75px', fontSize: '10px', backgroundColor: '#FCAA00', color: 'white' },
+    これから: { width: '75px', fontSize: '10px', backgroundColor: 'white', color: '#767676'},
+    達成率: { width: '75px', fontSize: '10px', backgroundColor: '#767676', color: 'white' },
+    フォロワー: { width: '75px', fontSize: '9px', backgroundColor: '#61C359', color: 'white' },
 };
 
 const ActivitiesResults = ({ parsedDataFromLocalStorage }) => {
