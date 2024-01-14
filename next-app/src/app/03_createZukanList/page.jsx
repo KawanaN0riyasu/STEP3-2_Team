@@ -108,56 +108,57 @@ const Card = () => {
 
   return (
     <Mockupphone> {/*デモ用スマホ画面*/}
-    <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}></div>
-      <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '100' }}>
-        <div style={{ padding:'30px', fontSize: '14px'}}>図鑑に登録したいお店に✅を入れてください。</div>
-          {parsedData.map((item, index) => (
-            <div key={index} className="card lg:card-side bg-base-100 shadow-xl" style={{ height: '250px', width: '90%', margin: '10px', display: 'flex' }}>
-              <figure style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box' }}>
-                <img src={item.image} alt={`Album ${index + 1} `} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </figure>
-              <div className="card-body" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' ,padding:'10px'}}>
-                
-              <div className="form-cntrol" style={{ position: 'absolute', top: '10px', right: '10px', zIndex: '2' }}>
-                  <label className="cursor-pointer label" style={{justifyContent:'right'}}>
-                    <input
-                      type="checkbox"
-                      checked={checkedItems[index]}
-                      className="checkbox border-orange-400 checked:border-white-800 [--chkbg:theme(colors.white.600)] [--chkfg:orange]"
-                      onChange={() => handleCheckboxChange(index)}
-                      style={{ 
-                        width: '30px', 
-                        height: '30px',
-                      }}
-                    />
-                  </label>
-                </div>
-                <h2 className="card-title"style={{ fontSize: '12px' }}>{item.name}</h2>
-                <li style={{ fontSize: '10px' }}> 運用状況: {item.status}</li>
-                <li style={{ fontSize: '10px' }}> 住所: {item.address}</li>
-                <li style={{ fontSize: '10px' }}> ユーザー評価: {item.rating}</li>
-              </div>
+    <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+        <BottomAppBar />{/*下部メニューバー*/}
+    </div>
+    <div>
+      <div style={{ padding:'30px', fontSize: '14px'}}>図鑑に登録したいお店に✅を入れてください。</div>
+      {parsedData.map((item, index) => (
+        <div key={index} className="card lg:card-side bg-base-100 shadow-xl" style={{ height: '250px', width: '90%', margin: '10px', display: 'flex' }}>
+          <figure style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box' }}>
+            <img src={item.image} alt={`Album ${index + 1} `} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </figure>
+          <div className="card-body" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' ,padding:'10px'}}>
+            
+          <div className="form-cntrol"　style={{ position: 'absolute', top: '10px', right: '10px', zIndex: '2' }}>
+              <label className="cursor-pointer label" style={{justifyContent:'right'}}>
+                <input
+                  type="checkbox"
+                  checked={checkedItems[index]}
+                  className="checkbox border-orange-400 checked:border-white-800 [--chkbg:theme(colors.white.600)] [--chkfg:orange]"
+                  onChange={() => handleCheckboxChange(index)}
+                  style={{ 
+                    width: '30px', 
+                    height: '30px',
+                  }}
+                />
+              </label>
             </div>
-          ))}
-          <div style={{ width: '80%', fontSize: '12px', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-            <button
-              type="button"
-              onClick={handleReturnClick}
-              style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' ,marginBottom:'80px'}}
-            >
-              検索MAPに戻る
-            </button>
-            <button
-              type="button"
-              onClick={handleRegisterClick}
-              style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' ,marginBottom:'80px'}}
-            >
-              図鑑登録に進む
-            </button>
-            <BottomAppBar />{/*下部メニューバー*/}
+            <h2 className="card-title"style={{ fontSize: '12px' }}>{item.name}</h2>
+            <li style={{ fontSize: '10px' }}> 運用状況: {item.status}</li>
+            <li style={{ fontSize: '10px' }}> 住所: {item.address}</li>
+            <li style={{ fontSize: '10px' }}> ユーザー評価: {item.rating}</li>
           </div>
-          {ReactDOM.createPortal(confirmationPopup, document.body)}
+        </div>
+      ))}
+      <div style={{ width: '80%', fontSize: '12px', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+        <button
+          type="button"
+          onClick={handleReturnClick}
+          style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' ,marginBottom:'80px'}}
+        >
+          検索MAPに戻る
+        </button>
+        <button
+          type="button"
+          onClick={handleRegisterClick}
+          style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' ,marginBottom:'80px'}}
+        >
+          図鑑登録に進む
+        </button>
       </div>
+      {ReactDOM.createPortal(confirmationPopup, document.body)}
+    </div>
     </Mockupphone>
   );
 };
