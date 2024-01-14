@@ -30,7 +30,7 @@ export default function Page(){
                 </>
             )}
             </p>
-            <figure className="flex-shrink-0">
+            <figure className="flex-shrink-0" >
                 <Image 
                     src={parsedDataFromLocalStorage && parsedDataFromLocalStorage.image
                         ? parsedDataFromLocalStorage.image

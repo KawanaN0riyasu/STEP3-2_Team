@@ -4,13 +4,19 @@ import { useEffect, useState, useRef } from 'react';
 import { useGoogleMaps } from '../../components/googleMapsScript'; 
 import Mockupphone from '../../components/mockupphone'; //デモ用スマホ画面追加
 import BottomAppBar from '../../components/BottomAppBar'; //下部メニューバー追加
+import { useRouter } from 'next/navigation';
 
 function Home({ initialPlaces }) {
     const { isLoaded, loadError, isMounted } = useGoogleMaps();
     const [places, setPlaces] = useState(initialPlaces);
     const [loading, setLoading] = useState(true);
     const mapRef = useRef(null);
-
+    const router = useRouter();
+    const handleMapButtonClick = () => {
+        // '/map' は実際の移動先のパスに置き換えてください
+        router.push('06_restaurantList');
+    };
+    
     useEffect(() => {
         if (!isLoaded) {
             // Google Maps APIが読み込まれていない場合は何もしない
@@ -63,13 +69,32 @@ function Home({ initialPlaces }) {
 
     return (
         <Mockupphone> {/*デモ用スマホ画面*/}
-            <MapContext.Provider value={isMounted}>
-                                {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
-                                <div className="sm-phone-4">
-                                    <Map places={places} />
-                                </div>
-            </MapContext.Provider>
-            <BottomAppBar />{/*下部メニューバー*/}
+            <div style={{ position: 'relative', height: '100%' }}>
+                <MapContext.Provider value={isMounted}>
+                                    {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
+                                    <div className="sm-phone-4">
+                                        <Map places={places} />
+                                    </div>
+                </MapContext.Provider>
+                <button 
+                    className="btn btn-sm mb-1" 
+                    style={{ 
+                        position: 'absolute', 
+                        top: '40px', 
+                        right: '10px', 
+                        width: '90px', 
+                        fontSize: '13px', 
+                        backgroundColor: '#FCAA00', 
+                        color: 'white', 
+                        marginRight:'10px',
+                        zIndex: 100,
+                    }}
+                    onClick={handleMapButtonClick}
+                >
+                    リストに戻る
+                </button>
+                <BottomAppBar />{/*下部メニューバー*/}
+            </div>
         </Mockupphone>
     );
 }

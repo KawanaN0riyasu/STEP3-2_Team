@@ -62,7 +62,14 @@ function Map({ places }) {
 
             // マーカーに情報ウィンドウを追加
             const infoWindow = new window.google.maps.InfoWindow({
-                content: `<div><strong>${place.info.name}</strong><br>${place.info.address}<br>ユーザー評価：${place.info.rating}</div>`,
+                content: `
+                    <div>
+                        <strong>${place.info.name}</strong><br>
+                        <img src="/images/anmitsu.jpeg" alt="${place.info.name}" style="max-width: 150px;"><br>
+                        ${place.info.address}<br>
+                        ユーザー評価：${place.info.rating}
+                    </div>
+                `,
             });
 
             // マーカーアイコンの設定
