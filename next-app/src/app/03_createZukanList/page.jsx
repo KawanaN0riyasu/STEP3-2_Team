@@ -108,7 +108,7 @@ const Card = () => {
 
   return (
     <Mockupphone> {/*デモ用スマホ画面*/}
-    <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100', marginLeft: '7px' }}>
+    <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100'}}>
         <BottomAppBar />{/*下部メニューバー*/}
     </div>
 
