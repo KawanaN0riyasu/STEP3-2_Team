@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import ZukanCard from '../../components/zukanCard';
 import Link from 'next/link';
 import Image from 'next/image';
+import Mockupphone from '../../components/mockupphone'; //デモ用スマホ画面追加
+import BottomAppBar from '../../components/BottomAppBar'; //下部メニューバー追加
 
 const Home = () => {
     const [zukans, setZukans] = useState([]);
@@ -16,55 +18,39 @@ const Home = () => {
     }, []);
 
     return(
-        <>
-        <div className="flex justify-center items-center">
-            {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
-            <div className="artboard phone-4">
+        <Mockupphone> {/*デモ用スマホ画面*/}
+
+        <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+            <BottomAppBar />{/*下部メニューバー*/}
+        </div>
+        
 
                 {/*メニューバー（上部） */}
-                <div style={{backgroundColor: '#FAE7BB'}} className="navbar rounded-md mt-1">
-                    
+                <div className="navbar" style={{backgroundColor: '#FAE7BB', paddingTop: '10px'}}>
                     <div className="flex">
-
-                        {/*プロフィールアイコン */}{/*サイズ見直し！ */}
-                        <div className="btn btn-ghost btn-circle avatar m-1">
-                            <div className="w-10 rounded-full ">
-                                {/*user_photo呼び出す？ */}
+                        {/*プロフィールアイコン */}
+                        <div className="profile" style={{display:'flex', alignItems: 'center',margin:'10px'}}>
+                        <div className="btn btn-ghost btn-circle avatar">
+                            <div className="w-10 rounded-full ">  
                                 <Image 
-                                    src="/images/character_girl_normal.png" 
-                                    width={100} 
-                                    height={100} 
+                                    src="/images/profile_image.png" 
+                                    width={120} 
+                                    height={120} 
                                     alt="user_photo"
                                     priority
                                     loading="eager"
                                 />
                             </div>
                         </div>  
-
-                        {/*user_name呼び出す？*/}
-                        <div className="text-lg m-1">yukiko*1210</div>
-
-                        {/*メダル数はどこと連携する？ */}
-                        <Image src="/images/medal_icon.png" width={30} height={30} alt="medal_icon" />
-                        <Image src="/images/medal_icon.png" width={30} height={30} alt="medal_icon" />
-                    
-                        <Link href ="06_restaurantList/">
-                            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle m-1">
-                                <div className="indicator">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                    <span className="badge badge-sm indicator-item">10</span>
-                                </div>
-                            </div>
-                        </Link>
-
-                        {/*設定 */}
-                        <Link href ="setting_kuwa/">
-                            <Image src="/images/setting_icon.png" width={20} height={20} alt="setting_icon"/>
-                        </Link>
-
+                        <div className="text-lg">yukiko*1210</div>
+                        </div>
+                        <div className='medals' style={{ display: 'flex', alignItems: 'center',maring:'10px'}}>
+                            <Image src="/images/medal_icon.png" width={30} height={30} alt="medal_icon" />
+                            <Image src="/images/medal_icon.png" width={30} height={30} alt="medal_icon" />
+                        </div>
                     </div>
                 </div>
-
+                
                 {/*ソート */}
                 <div className="flex">
                     <select 
@@ -76,6 +62,7 @@ const Home = () => {
                         <option>友達登録が多い順</option>
                     </select>
                 </div>
+                
                 <div>
                     <div className="grid grid-cols-2 gap-4">
                         {zukans.map(zukan => (
@@ -83,9 +70,7 @@ const Home = () => {
                         ))}
                     </div>
                 </div>
-            </div>
-        </div>
-        </>
+     </Mockupphone>
     );
 };
 

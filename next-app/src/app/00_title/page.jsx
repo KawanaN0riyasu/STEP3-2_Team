@@ -16,7 +16,7 @@ export default function Page() {
       <Mockupphone>{/*デモ用スマホ画面追加*/}
         <div style={{ backgroundColor: "#FCAA00", height: "569px", display: "flex", justifyContent: "center", alignItems: "center" }}>
           <div className="sm-phone-4">
-            <Image src="/images/top.png" width={432} height={315} alt="top" />
+            <Image src="/images/top.png" width={432} height={315} alt="top"　priority />
             <Link href="02_mapSearch/">
               <div className="flex items-center justify-center">
                 <button className="btn btn-ghost font-bold text-lg">START</button>

@@ -8,9 +8,10 @@ function mockupphone({children}) {
                     <div className="mockup-phone" style={{ position: 'relative',overflow: 'auto'}}> 
                         <div className="camera"></div> 
                             <div className="display" style={{position:'relative'}}>
-                                <div className="artboard artboard-demo phone-1" style={{overflow: 'auto',justifyContent: 'flex-start'}}> {/*flex-startでスクロール上端からできた */}
-                                    <div className="artboard phone-1" style={{backgroundColor: '#FFFFFF'}}>
-                                    {children}
+
+                                <div className="artboard artboard-demo phone-1" style={{overflow: 'auto',justifyContent: 'flex-start',backgroundColor:'#ffffff'}}> {/*flex-startでスクロール上端からできた */}
+                                    <div className="artboard phone-1" style={{backgroundColor: '#FFFFFF',paddingBottom:'10px'}}>
+                     {children}
                                     </div>
                                 </div>
                             </div>
