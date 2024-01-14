@@ -21,11 +21,7 @@
     "next": "^14.0.4",
     "react": "^18",
     "react-dom": "^18",
-<<<<<<< HEAD
-    "react-helmet": "^6.1.0"
-=======
     "styled-components": "^6.1.8"
->>>>>>> a781a480eda16a6f82dd866bea12112f6d6a46db
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",

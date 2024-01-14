@@ -108,9 +108,10 @@ const Card = () => {
 
   return (
     <Mockupphone> {/*デモ用スマホ画面*/}
-    <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+    <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100', marginLeft: '7px' }}>
         <BottomAppBar />{/*下部メニューバー*/}
     </div>
+
     
     <div>
       <div style={{ padding:'30px 0 0 10px', fontSize: '14px'}}>図鑑に登録したいお店に✅を入れてください。</div>
@@ -122,6 +123,7 @@ const Card = () => {
             <figure><img src={item.image} alt="Album" style={{width:'100%',height:'100%'}}/></figure>
             <div className="form-cntrol" style={{ position: 'absolute', top: '10px', left:'10px', zIndex: '2' }}>
               <label className="cursor-pointer label">
+
                 <input
                   type="checkbox"
                   checked={checkedItems[index]}
@@ -198,6 +200,7 @@ const Card = () => {
       ))}
 
 
+
 <div className="m-3 grid-item" style={{ display: 'flex', justifyContent: 'flex-end' }}>
       <button
         type="button"
@@ -207,6 +210,7 @@ const Card = () => {
       図鑑登録に進む
       </button>
 </div>
+
       {ReactDOM.createPortal(confirmationPopup, document.body)}
     </div>
     </Mockupphone>

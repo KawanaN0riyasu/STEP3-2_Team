@@ -18,7 +18,7 @@ const Cards = ({ restaurantsIDList }) => {
 
     const handleMapButtonClick = () => {
         // '/map' は実際の移動先のパスに置き換えてください
-        router.push('07-2_restraurantMap');
+        router.push('07_restraurantMap');
     };
 
     useEffect(() => {

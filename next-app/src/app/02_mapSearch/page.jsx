@@ -6,6 +6,7 @@ import sendSearchDataToServer from '../../components/toFastAPI';
 import { useRouter } from 'next/navigation';
 import BottomAppBar from '../../components/BottomAppBar'; //下部メニューバー追加
 import Mockupphone from '../../components/mockupphone'; //デモ用スマホ画面追加
+import { useGoogleMaps } from '../../components/googleMapsScript'; 
 
 //関数・変数定義
 let Map;
@@ -30,10 +31,7 @@ const libraries = ["places"];
 export default function SearchMap(){
     const [searchWord, setSearchWord] = useState('');
     const [markerPoint, setMarkerPoint] = useState(center);
-    const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyCzCWRo1T8I6JC_9C9LTafNKR_A-8W_VC4',
-        libraries: libraries,
-    });
+    const { isLoaded, loadError } = useGoogleMaps();
     const mapRef = useRef();
     const infoWindows = useRef([]);
     const onMapLoad = useCallback((map) => {mapRef.current = map;}, []);
@@ -225,11 +223,9 @@ export default function SearchMap(){
     return (
         <>
         <Mockupphone> {/*デモ用スマホ画面*/}
-                <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
-                    <BottomAppBar />{/*下部メニューバー*/}
-                </div>
+                <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}></div>
                     <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '100' }}>
-                        <div style={{ margin: 'auto', marginTop: '50px', display: 'flex', alignItems: 'center', background: 'white', width: '80%', height: '50px', borderRadius: '5px', padding: '10px 10px', border: '1px solid #ccc' }}>
+                        <div style={{ margin: 'auto', marginTop: '40px', display: 'flex', alignItems: 'center', background: 'white', width: '95%', height: '50px', borderRadius: '5px', padding: '10px 10px', border: '1px solid #ccc' }}>
                             <input
                                 id="standard-basic"
                                 label="今日何食べる？"
@@ -250,7 +246,7 @@ export default function SearchMap(){
                     <div style={{ height: "100%", width: "100%", position: 'relative' }}>
                         <GoogleMap
                             id="map"
-                            mapContainerStyle={{ width: '100%', height: '100%' }}
+                            mapContainerStyle={{ width: '100%', height: '88%' }}
                             zoom={14}
                             center={markerPoint}
                             options={{ disableDefaultUI: true, zoomControl: false}}
@@ -270,6 +266,7 @@ export default function SearchMap(){
                                 </button>
                             </div>
                         )}
+                    <BottomAppBar />{/*下部メニューバー*/}
                     </div>
             </Mockupphone>
     </>
