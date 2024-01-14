@@ -2,6 +2,8 @@
 
 import ActivitiesResults from '../../components/06_resultsOfActivities';
 import Image from 'next/image';
+import Mockupphone from '../../components/mockupphone'; //デモ用スマホ画面追加
+import BottomAppBar from '../../components/BottomAppBar'; //下部メニューバー追加
 
 const defaultImage = '/photo_up.png';
 
@@ -10,17 +12,19 @@ export default function Page(){
     const parsedDataFromLocalStorage = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("selectedZukan")) : null;
 
     return(
-        <>
-        {/*スマホサイズ(375*800)指定→layout.jsで当てるか調べ中*/}
-        <div className="artboard phone-4">
+        <Mockupphone> {/*デモ用スマホ画面*/}
+
+        <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
+            <BottomAppBar />{/*下部メニューバー*/}
+        </div>
 
         {/*図鑑タイトル*/}
-        <h1 className="card-title text-md mt-2 mb-2">
+        <h1 className="card-title text-md mt-7 ml-2">
             {parsedDataFromLocalStorage && parsedDataFromLocalStorage.title
                 ? parsedDataFromLocalStorage.title
                 : 'データがありません'}
         </h1>
-        <div className="flex items-center mt-2 mb-2">
+        <div className="flex items-center m-2">
             <p className="text-xs flex-grow">
             {parsedDataFromLocalStorage && parsedDataFromLocalStorage.description && (
                 <>
@@ -46,44 +50,6 @@ export default function Page(){
 
         {/*活動実績*/}
         <ActivitiesResults parsedDataFromLocalStorage={parsedDataFromLocalStorage} />
-
-        {/*メニューバー（下部）*/}
-        <div className="flex-none flex items-center bg-orange-100 pt-3 pb-3">
-
-            <div className="flex-none flex-grow flex flex-col items-center">  
-            <Image src="/images/profile_icon.png" width={30} height={30} alt="profile_icon"/>
-            </div>
-
-            <div className="flex-none flex-grow flex flex-col items-center"> 
-            <Image src="/images/friendszukan_icon.png"
-            width={30}
-            height={30}
-            alt="friendszukan_icon"/>
-            </div>
-
-            <div className="flex-none flex-grow flex flex-col items-center"> 
-            <Image src="/images/map.png"
-            width={30}
-            height={30}
-            alt="map"/>
-            </div>
-
-            <div className="flex-none flex-grow flex flex-col items-center"> 
-            <Image src="/images/bell_icon.png"
-            width={30}
-            height={30}
-            alt="bell_icon"/>
-            </div>
-
-            <div className="flex-none flex-grow flex flex-col items-center"> 
-            <Image src="/images/setting_icon.png"
-            width={30}
-            height={30}
-            alt="setting_icon"/>
-            </div>
-
-            </div>
-        </div>
-        </>
+        </Mockupphone>
         )
     }

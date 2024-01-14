@@ -111,52 +111,102 @@ const Card = () => {
     <div style={{  position: 'absolute', bottom: '0', width: '100%', zIndex: '100' }}>
         <BottomAppBar />{/*下部メニューバー*/}
     </div>
+    
     <div>
-      <div style={{ padding:'30px', fontSize: '14px'}}>図鑑に登録したいお店に✅を入れてください。</div>
+      <div style={{ padding:'30px 0 0 10px', fontSize: '14px'}}>図鑑に登録したいお店に✅を入れてください。</div>
+      
       {parsedData.map((item, index) => (
-        <div key={index} className="card lg:card-side bg-base-100 shadow-xl" style={{ height: '250px', width: '90%', margin: '10px', display: 'flex' }}>
-          <figure style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box' }}>
-            <img src={item.image} alt={`Album ${index + 1} `} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </figure>
-          <div className="card-body" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' ,padding:'10px'}}>
-            
-          <div className="form-cntrol"　style={{ position: 'absolute', top: '10px', right: '10px', zIndex: '2' }}>
-              <label className="cursor-pointer label" style={{justifyContent:'right'}}>
+      
+        <div className="cardall" style={{margin:'10px'}}>
+            <div key={index}  className="card lg:card-side bg-base-100 shadow-xl">     
+            <figure><img src={item.image} alt="Album" style={{width:'100%',height:'100%'}}/></figure>
+            <div className="form-cntrol" style={{ position: 'absolute', top: '10px', left:'10px', zIndex: '2' }}>
+              <label className="cursor-pointer label">
                 <input
                   type="checkbox"
                   checked={checkedItems[index]}
-                  className="checkbox border-orange-400 checked:border-white-800 [--chkbg:theme(colors.white.600)] [--chkfg:orange]"
+                  className="checkbox [--chkfg:white]"
                   onChange={() => handleCheckboxChange(index)}
                   style={{ 
                     width: '30px', 
                     height: '30px',
+                    borderColor:'white',
+                    '--chkbg': checkedItems[index] ? '#23CB57' : '#23CB57',
+                    '--chkfg': checkedItems[index] ? '#ffffff' : '#ffffff',
                   }}
                 />
               </label>
+          </div>
+            <div className="card-body" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' ,padding:'10px'}}>
+              <h2 className="card-title" style={{ fontSize: '14px', borderBottom: '1px dotted #767676'}}>{item.name}</h2>
+              <li style={{ fontSize: '10px'}}>運用状況：{item.status}</li>
+              <li style={{ fontSize: '10px'}}>住所：{item.address}</li>
+              <li style={{ fontSize: '10px'}}>ユーザー評価：{item.rating}</li>
+            <div className="card-actions justify-end"></div>
             </div>
-            <h2 className="card-title"style={{ fontSize: '12px' }}>{item.name}</h2>
+            </div>
+            </div>
+
+
+
+
+
+
+
+
+      
+        /*<div key={index} className="card lg:card-side bg-base-100 shadow-xl" style={{ height: '180px', width: '90%', margin: '10px', display: 'flex' }}>
+          
+          <div className="form-cntrol" style={{ position: 'absolute', top: '10px', left:'10px', zIndex: '2' }}>
+              <label className="cursor-pointer label">
+                <input
+                  type="checkbox"
+                  checked={checkedItems[index]}
+                  className="checkbox [--chkfg:white]"
+                  onChange={() => handleCheckboxChange(index)}
+                  style={{ 
+                    width: '30px', 
+                    height: '30px',
+                    borderColor:'white',
+                    '--chkbg': checkedItems[index] ? '#23CB57' : '#23CB57',
+                    '--chkfg': checkedItems[index] ? '#ffffff' : '#ffffff',
+                  }}
+                />
+              </label>
+          </div>
+          
+          
+          <div className="image" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box' }}>
+            <img src={item.image} alt={`Album ${index + 1} `} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+
+          
+          
+          <div className="card-body" style={{ width: '100%', flex: '0 0 50%', boxSizing: 'border-box',  overflow: 'hidden' ,padding:'10px'}}>
+            
+          
+
+            <h2 className="card-title" style={{ fontSize: '14px', borderBottom: '1px dotted #767676'}}>{item.name}</h2>
             <li style={{ fontSize: '10px' }}> 運用状況: {item.status}</li>
             <li style={{ fontSize: '10px' }}> 住所: {item.address}</li>
             <li style={{ fontSize: '10px' }}> ユーザー評価: {item.rating}</li>
+          
           </div>
-        </div>
+
+        </div> */
+
       ))}
-      <div style={{ width: '80%', fontSize: '12px', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-        <button
-          type="button"
-          onClick={handleReturnClick}
-          style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' ,marginBottom:'80px'}}
-        >
-          検索MAPに戻る
-        </button>
-        <button
-          type="button"
-          onClick={handleRegisterClick}
-          style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' ,marginBottom:'80px'}}
-        >
-          図鑑登録に進む
-        </button>
-      </div>
+
+
+<div className="m-3 grid-item" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <button
+        type="button"
+        onClick={handleRegisterClick}
+        style={{ background: '#FFA500', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 20px', cursor: 'pointer' ,margin:'0 0 120px 10px',marginLeft:'auto'}}
+      >
+      図鑑登録に進む
+      </button>
+</div>
       {ReactDOM.createPortal(confirmationPopup, document.body)}
     </div>
     </Mockupphone>
